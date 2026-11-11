@@ -48,7 +48,7 @@ Use R 4.4.2 and Bioconductor 3.20 when comparing with the server snapshot. The m
         install.packages("BiocManager")  
         
     BiocManager::install(c("MAST", "Seurat", "Signac", "SingleR", "SingleCellExperiment", "BiocFileCache", "AnnotationHub",
-    "SummarizedExperiment", "Biobase", "MatrixGenerics", "S4Vectors", "IRanges", "GenomeInfoDb", "GenomicRanges", "BiocGenerics", "XVector", "Biostrings", "BiocIO", "rtracklayer", "BSgenome", "BSgenome.Hsapiens.UCSC.hg19", "GenomicFeatures", "AnnotationDbi", "AnnotationFilter", "ensembldb", "EnsDb.Hsapiens.v75", "EnsDb.Hsapiens.v86", "EnsDb.Mmusculus.v79", "org.Hs.eg.db", "org.Mm.eg.db", "GO.db", "BSgenome.Hsapiens.UCSC.hg38", "BSgenome.Hsapiens.NCBI.GRCh38", "BSgenome.Mmusculus.UCSC.mm10", "HDO.db", "clusterProfiler", "JASPAR2020", "TFBSTools"))
+    "SummarizedExperiment", "Biobase", "MatrixGenerics", "S4Vectors", "IRanges", "GenomeInfoDb", "GenomicRanges", "BiocGenerics", "XVector", "Biostrings", "BiocIO", "rtracklayer", "BSgenome", "BSgenome.Hsapiens.UCSC.hg19", "GenomicFeatures", "AnnotationDbi", "AnnotationFilter", "ensembldb", "EnsDb.Hsapiens.v75", "EnsDb.Hsapiens.v86", "EnsDb.Mmusculus.v79", "org.Hs.eg.db", "org.Mm.eg.db", "GO.db", "BSgenome.Hsapiens.UCSC.hg38", "BSgenome.Hsapiens.NCBI.GRCh38", "BSgenome.Mmusculus.UCSC.mm10", "HDO.db", "clusterProfiler", "JASPAR2020", "TFBSTools", "motifmatchr"))
     ```
     The [sessionInfo](sessionInfo) file is an older Windows R 4.3.1 session, not the current server environment. The separate reference preparation script additionally requires `celldex` and `digest`.
 
