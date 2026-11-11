@@ -21,6 +21,8 @@ A visible VS Code remote terminal contained an actual Motif traceback from the s
 
 Four matching official source archives were downloaded and integrity checked outside the Git repository in `../signacshiny_official_r_packages/`: TFMPvalue 0.0.9 (CRAN archive), DirichletMultinomial 1.48.0, TFBSTools 1.44.0, and motifmatchr 1.28.0 (Bioconductor 3.20). They have not been installed or load-tested on the server. See the separate package manifest for hashes.
 
+The inherited `server.R` initializes many analysis objects with `<<-` inside the Shiny server function. In R this can assign to a shared parent/global environment when no session-local binding exists, so concurrent sessions may interfere. This is a source-level risk, not a demonstrated failure in the single-session test. The repeated `reactiveValues()` initializers also obscure which slots are initialized; observed default workflows nevertheless ran. Correcting the shared-state design would touch many observers and requires a separate multi-session regression test against the actual stage source; it has not been silently refactored for v1.0.0. The existing `run_step()` measures elapsed time and before/after `lobstr::mem_used()` values when available; it does not measure peak process RSS. The reported ~2.23 GiB peak RSS from a separate smoke test must not be relabeled as a `run_step()` memory delta.
+
 | Area | Status | Evidence needed |
 |---|---|---|
 | Example import, QC, filtering, DR and clustering | PASS IN STAGE BROWSER | Confirm stage source/parameters against a Git commit before transferring this result to the release candidate. |
