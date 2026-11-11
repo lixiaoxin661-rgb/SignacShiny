@@ -353,7 +353,7 @@ ui<-dashboardPage(
             column(width = 9,
                    tags$head(tags$style(type = "text/css", HTML(".shiny-text-output {font-size:18px; }"))), 
                    shinydashboard::tabBox(
-                     title = tagList(icon("chart-column"),"VinPlot"), width =NULL,selected = "before filte",side="right",
+                     title = tagList(icon("chart-column"),"VinPlot"), width =NULL,selected = "Before Filter",side="right",
                      # useShinyjs(), 
                      tabsetPanel(id="qVinplot",
                                  tabPanel("Before Filter",

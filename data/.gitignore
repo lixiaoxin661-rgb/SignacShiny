@@ -1,0 +1,5 @@
+*.Rdata
+*.RData
+*.rds
+*.RDS
+zc/

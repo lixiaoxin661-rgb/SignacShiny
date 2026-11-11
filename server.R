@@ -92,13 +92,17 @@ server <- function(input,output,session){
 
     gc()
 
-    mem_before <- if (requireNamespace("lobstr", quietly = TRUE)) as.numeric(lobstr::mem_used()) else NA_real_
+    memory_bytes <- function() {
+      if (!requireNamespace("lobstr", quietly = TRUE)) return(NA_real_)
+      tryCatch(as.numeric(lobstr::mem_used()), error = function(e) NA_real_)
+    }
+    mem_before <- memory_bytes()
     t1 <- Sys.time()
 
     result <- force(expr)
 
     t2 <- Sys.time()
-    mem_after <- if (requireNamespace("lobstr", quietly = TRUE)) as.numeric(lobstr::mem_used()) else NA_real_
+    mem_after <- memory_bytes()
 
     cat(sprintf(
       "[%s]\nElapsed: %.2f s\nMemory: %.2f GB → %.2f GB (Δ %.2f MB)\n\n",
@@ -646,7 +650,7 @@ server <- function(input,output,session){
         input$submit_FilterCells
         cat("\033[31m","  QC:VlnPlots \033[0m\n");
         qcVlnPlots <<- VlnPlot(pbmcs_1,features = c('peak_region_fragments','TSS.enrichment', 'blacklist_ratio', 'nucleosome_signal','pct_reads_in_peaks'),
-                               pt.size = Seurat:::AutoPointSize(data = pbmc),ncol = 5,group.by = input$qcGroup )
+                               pt.size = Seurat:::AutoPointSize(data = pbmc),ncol = 5)
         print(qcVlnPlots)
         print(pbmcs_1)    
     })
@@ -2440,7 +2444,7 @@ server <- function(input,output,session){
        else if(input$FM_VinPlot_PlotChoices==".png")
        {png(file = file, width = input$FM_VinPlot_PlotWidth, height = input$FM_VinPlot_PlotHeight,units="in",res=1000)}
        else
-       {tiff(file = file, width = input$FM_VinPlot_PlotWidth, height = input$FM_VinPlotPlotHeight,units="in",res=1000)}
+       {tiff(file = file, width = input$FM_VinPlot_PlotWidth, height = input$FM_VinPlot_PlotHeight,units="in",res=1000)}
        print(FM_VinPlot)
        dev.off()
      })

@@ -1,0 +1,7 @@
+# Runtime data
+
+The GitHub branch does not contain the 12 formerly tracked LFS payloads. Their pointer OIDs and the server-measured SHA-256 hashes are preserved in [`../DATA_LFS_AUDIT.csv`](../DATA_LFS_AUDIT.csv) and [`../SERVER_DATA_INVENTORY.tsv`](../SERVER_DATA_INVENTORY.tsv). All 12 former download actions returned 404; the pointer files were removed to avoid presenting them as usable data.
+
+The built-in PBMC example reads `pbmc.RDS`; its QC screen reads `qcDensityScatterPlot.rds`, `qcFragmentHistogram.rds`, and `qcTSSPlot.rds`. Cell Type Annotation reads one of the seven reference `.Rdata` files selected in the UI. These 11 paths must contain real, verified files for the corresponding functions. `pbmcs_with_motifs_homo.rds` has no fixed-path read in the four main R files and is not required for application startup.
+
+The seven reference datasets can be fetched from Bioconductor celldex using [`../scripts/prepare_celldex_references.R`](../scripts/prepare_celldex_references.R), but this route has not passed a full server-side functional test or a comparison with the original serialized server files. The processed PBMC and QC objects have no verified public acquisition route or redistribution authorization. Do not upload those private files. The `.gitignore` here helps prevent accidental addition; any later approved LFS upload requires an explicit review and a fresh-clone SHA-256 check.
