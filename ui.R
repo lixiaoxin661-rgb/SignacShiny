@@ -454,7 +454,7 @@ ui<-dashboardPage(
                 title = tagList(icon("chart-column"),"Create Gene Activity Matrix "), width =12, status = "warning", collapsible = TRUE,
                 helpText(
                   div(class="my-custom-div",
-                      strong("Greate Gene Activity Matrix"), 
+                      strong("Create Gene Activity Matrix"),
                       "module in our single-cell ATAC-seq platform enables the ",
                       strong("quantification of gene activity based on chromatin accessibility"),
                       ".Since scATAC-seq primarily captures open chromatin regions rather than direct gene expression levels, interpreting and annotating clusters can be more challenging 
@@ -775,7 +775,7 @@ ui<-dashboardPage(
                      div(actionButton("submit_GenomicRegionsPlot","Genomic Regions Plot", icon = icon("play-circle")), align = "center"))),
             column(8,
                    shinydashboard::box(
-                     title = tagList(icon("chart-column"),"GenomicReginsPlot"), width =NULL,height = 710, status = "warning", collapsible = TRUE,
+                     title = tagList(icon("chart-column"),"Genomic Region Visualization Plot"), width =NULL,height = 710, status = "warning", collapsible = TRUE,
                      plotOutput("GenomicRegionsPlot",width="100%",height = 550)%>%withSpinner(),
                      splitLayout(cellWidths = c("30%","30%","40%"),
                                  numericInput("GenomicRegionsPlot_PlotWidth", "Width", min = 0, max = 250, value = 10),

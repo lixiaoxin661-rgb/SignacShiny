@@ -14,18 +14,21 @@ This record separates verified source checks from server runtime claims. It is n
 
 The owner supplied the personal stage path `/users/xiaoxli/SignacShiny-stage/SignacShiny-chore-manuscript-ui-release`, two personal R library directories, and `outputs/fullflow_test_20261112_034903/`. The reported 12/12 smoke result and 581-to-342-cell PBMC result require the underlying scripts, logs, inputs, and outputs before they can be accepted as release evidence. The local Git candidate may differ from the stage files; do not overwrite either copy blindly.
 
+A separate browser session subsequently exercised the **running personal stage** with real PBMC data. Example import, QC plots and one PNG download, filtering, normalization, SVD/DepthCor, UMAP, clustering, Gene Activity Matrix, both RNA differential modes with CSV downloads, default SingleR annotation, and a genomic region plot produced outputs. GO ran but returned no enriched terms. The exact observations and remaining gaps are in `server_stage_browser_test_20261112.md`. These results do not establish that the local branch or future Release behaves identically until the stage source is reconciled with Git history.
+
 A visible VS Code remote terminal contained an actual Motif traceback from the stage's `server.R`: `there is no package called 'TFBSTools'`. A later terminal showed `DirichletMultinomial` and `TFMPvalue` unavailable to an attempted `TFBSTools` build and `motifmatchr` consequently missing. Thus Motif enrichment and downstream footprinting are **FAIL / not validated**, regardless of the earlier 12/12 smoke summary. The underlying `DirichletMultinomial` build error has not been retrieved.
 
 Four matching official source archives were downloaded and integrity checked outside the Git repository in `../signacshiny_official_r_packages/`: TFMPvalue 0.0.9 (CRAN archive), DirichletMultinomial 1.48.0, TFBSTools 1.44.0, and motifmatchr 1.28.0 (Bioconductor 3.20). They have not been installed or load-tested on the server. See the separate package manifest for hashes.
 
 | Area | Status | Evidence needed |
 |---|---|---|
-| Example import, QC, filtering, DR and clustering | NOT VERIFIED HERE | Inspect stage smoke script, logs, and actual result files; confirm same commit and parameters. |
-| Gene activity and RNA differential analysis | NOT VERIFIED HERE | Actual assay creation and both comparisons with result tables. |
-| SingleR, regions and GO | NOT VERIFIED HERE | Actual computations and outputs. |
+| Example import, QC, filtering, DR and clustering | PASS IN STAGE BROWSER | Confirm stage source/parameters against a Git commit before transferring this result to the release candidate. |
+| Gene activity and RNA differential analysis | PASS IN STAGE BROWSER | Assay creation, both comparison tables and CSV downloads observed; independent matrix export and exact commit still needed. |
+| SingleR and regions | PASS IN STAGE BROWSER | Default reference table/plot and region plot observed; full parameter matrix and region download remain untested. |
+| GO | NO ENRICHMENT RESULT | Calculation returned an explicit no-result warning for the real marker list; positive enrichment not demonstrated. |
 | Motif enrichment | FAIL | Load `TFBSTools` and `motifmatchr` in the stage's exact R session, then run true enrichment and inspect nonempty output. |
 | Footprinting | NOT TESTED | Valid motif, successful computation, plot and download. |
-| All 12 pages and downloads | NOT VERIFIED HERE | Browser interaction or module-specific test logs and generated files. |
+| All 12 pages and downloads | PARTIAL | All introduction text visible; selected downloads verified. Custom upload, alternate paths, Motif/footprinting and remaining formats need tests. |
 
 ## Data and release gate
 

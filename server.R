@@ -155,12 +155,12 @@ server <- function(input,output,session){
       vbox_NDR=renderValueBox({
         color<-if (!is.null(values$dpDimPlot)) "yellow" else "orange"
         icon_name <- if (!is.null(values$dpDimPlot)) "check" else "hourglass-half"
-        valueBox(value=NULL,subtitle =tags$p("Dim Reduction &Clustering",style="font-size:14px;font-weight:bold"),
+        valueBox(value=NULL,subtitle =tags$p("Dimensionality Reduction & Clustering",style="font-size:14px;font-weight:bold"),
                  color=color,icon = icon(icon_name,style = "font-size: 25px"))}),
       vbox_geneactivity = renderValueBox({
         color<-if (!is.null(gene.activities)) "yellow" else "orange"
         icon_name <- if (!is.null(gene.activities)) "check" else "hourglass-half" 
-        valueBox(value = NULL,subtitle =tags$p("Creat Gene Activity Matrix ",style = "font-size:14px;font-weight:bold"),
+        valueBox(value = NULL,subtitle =tags$p("Create Gene Activity Matrix ",style = "font-size:14px;font-weight:bold"),
                  color = color,
                  icon = icon(icon_name,style = "font-size: 25px"))}),
       vbox_findAllmaker=renderValueBox({
@@ -201,7 +201,7 @@ server <- function(input,output,session){
       vbox_footprint=renderValueBox({
         color<-if (!is.null(fpFootPrintingPlot)) "yellow" else "orange"
         icon_name <- if (!is.null(fpFootPrintingPlot)) "check" else "hourglass-half"
-        valueBox(value = NULL,subtitle =tags$p("Foot Printing",style="font-size:14px;font-weight:bold"),
+        valueBox(value = NULL,subtitle =tags$p("Transcription Factor Footprinting",style="font-size:14px;font-weight:bold"),
                  color=color,icon = icon(icon_name,style = "font-size: 25px"))})
     )} 
   
