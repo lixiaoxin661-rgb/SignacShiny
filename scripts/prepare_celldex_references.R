@@ -2,8 +2,8 @@
 # Fetch public SingleR references into an empty staging data directory.
 # This does not reproduce the server's serialized RData bytes by itself.
 args <- commandArgs(trailingOnly = TRUE)
-if (length(args) != 1L || args[[1L]] %in% c("-h", "--help")) {
-  cat("Usage: Rscript --vanilla scripts/prepare_celldex_references.R /path/to/stage/data\n")
+if (length(args) < 1L || length(args) > 2L || args[[1L]] %in% c("-h", "--help")) {
+  cat("Usage: Rscript --vanilla scripts/prepare_celldex_references.R /path/to/stage/data [reference-name]\n")
   quit(status = if (length(args) == 1L) 0L else 2L)
 }
 if (!requireNamespace("celldex", quietly = TRUE)) {
@@ -24,6 +24,12 @@ references <- c(
   MouseRNAseq = "MouseRNAseqData",
   NovershternHematopoietic = "NovershternHematopoieticData"
 )
+if (length(args) == 2L) {
+  if (!args[[2L]] %in% names(references)) {
+    stop("Unknown reference name: ", args[[2L]])
+  }
+  references <- references[args[[2L]]]
+}
 destinations <- file.path(out_dir, paste0(names(references), ".Rdata"))
 if (any(file.exists(destinations))) {
   stop("Refusing to overwrite existing references: ",
