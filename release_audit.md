@@ -9,6 +9,7 @@ This record separates verified source checks from server runtime claims. It is n
 - `git diff --check` passed. The local `www/workflow.svg` SHA-256 is `cdecda452925cf460318bfe590bb4c6f427bc13ebadd3b03cfa46a1c75ee79d6`, matching the previously supplied original SVG. README and home reference that path.
 - The previously completed page-by-page wording check is recorded in `release_ui_audit.md`. The current personal server stage has not yet been compared byte-for-byte with this local branch.
 - The local code retains the server analysis functions and `run_step()` timing/optional `lobstr` memory reporting. `Cell Filtering` calls `run_step()`. This audit has not rerun end-to-end analysis or downloads.
+- On 2026-11-12, the branch was pushed to GitHub at `22dcde2df367d08e54fd1520ca22fc9cbe21ccd4`, then independently cloned into a new directory. In that clone all four core R files parsed, `renv.lock` parsed as JSON, five `www/` resources were present, README referenced `www/workflow.svg`, and that SVG matched the original SHA-256. `git lfs ls-files` returned no tracked objects and `data/` contained only its documentation and ignore file: the source clone remains without runtime example/reference data.
 
 ## Personal server stage: evidence still required
 
