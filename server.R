@@ -85,8 +85,32 @@ server <- function(input,output,session){
     shinyjs::disable(selector = ".sidebar li a[data-value='seven']")
   }
 
+  # install.packages("lobstr")
   
-  
+
+  run_step <- function(step_name, expr) {
+
+    gc()
+
+    mem_before <- if (requireNamespace("lobstr", quietly = TRUE)) as.numeric(lobstr::mem_used()) else NA_real_
+    t1 <- Sys.time()
+
+    result <- force(expr)
+
+    t2 <- Sys.time()
+    mem_after <- if (requireNamespace("lobstr", quietly = TRUE)) as.numeric(lobstr::mem_used()) else NA_real_
+
+    cat(sprintf(
+      "[%s]\nElapsed: %.2f s\nMemory: %.2f GB → %.2f GB (Δ %.2f MB)\n\n",
+      step_name,
+      as.numeric(difftime(t2, t1, units = "secs")),
+      as.numeric(mem_before) / 1024^3,
+      as.numeric(mem_after) / 1024^3,
+      (as.numeric(mem_after) - as.numeric(mem_before)) / 1024^2
+    ))
+
+    result
+  }
  # reactive--------------------------------------------------------
   count <- reactiveVal(NULL)
   fragments <- reactiveVal(NULL)
@@ -294,6 +318,7 @@ server <- function(input,output,session){
   })
  
   observeEvent(input$submit_Start,{
+    run_step("Start",{
     cat("\033[31m","Create SeuratObject! \033[0m\n");
     id<-showNotification("Load Data Running...", duration = NULL,closeButton = FALSE)
     on.exit(removeNotification(id), add = TRUE)
@@ -529,10 +554,11 @@ server <- function(input,output,session){
                      color = "yellow")}}
       })
     })
-  
+  })
  #Quality control-----------------------------------------------
   observeEvent(input$submit_Qualitycontrol,{
     # 显示运行中的通知消息
+    run_step("Qualitycontrol",{
     id<-showNotification("Quality Control Running...", duration = NULL,closeButton = FALSE)
     on.exit(removeNotification(id), add = TRUE)
     output$QCDSPlot <- renderPlot({
@@ -601,8 +627,10 @@ server <- function(input,output,session){
                 $("a[data-value=ones]").css("color", "#E6E7E8");});'
     shinyjs::runjs(js.2)
   })
+  })
   #FilterCell-----------------------------------------------------------------
   observeEvent(input$submit_FilterCells,{
+    run_step("FilterCells",{
     id<-showNotification("Filter Cells Running...", duration = NULL,closeButton = FALSE)
     on.exit(removeNotification(id), add = TRUE)
     clean_filter(TRUE)
@@ -636,9 +664,10 @@ server <- function(input,output,session){
             $("a[data-value=two]").css("color", "#E6E7E8");});'
     shinyjs::runjs(js.3)
   })
-  
+  })
   # Normalization And LDR ----------------------------------------------------------------------
   observeEvent(input$submit_Normalization,{
+    run_step("Normalization",{
     clean_Nor(TRUE)
     id<-showNotification("Normalization Running...", duration = NULL,closeButton = FALSE)
     on.exit(removeNotification(id), add = TRUE)
@@ -650,6 +679,7 @@ server <- function(input,output,session){
     showNotification("Normalization End of run！", type = "message")
     
  })
+  })
   observe({
     if(!is.null(values$Normalization)){
       shinyjs::enable("submit_LDR")
@@ -658,6 +688,7 @@ server <- function(input,output,session){
     }
   })
   observeEvent(input$submit_LDR,{
+    run_step("LDR",{
     id<-showNotification("Linear Dimensional Reduction Running...", duration = NULL,closeButton = FALSE)
     on.exit(removeNotification(id), add = TRUE)
     clean_LDR(TRUE)
@@ -702,6 +733,7 @@ server <- function(input,output,session){
     #updateActionButton(session, "submit_NLDR", disabled = FALSE)  
     showNotification("Linear Dimensional Reduction End of run！", type = "message")
     })
+  })
   observe({
     if(!is.null(values$deDepthCorPlot)){
       shinyjs::enable("submit_NLDR")
@@ -726,6 +758,7 @@ server <- function(input,output,session){
     }
   })
   observeEvent(input$submit_NLDR,{
+    run_step("NLDR",{
     clean_NLDR(TRUE)
     print(values$submit_Clustering)
     print("-------------------------dd----------------")
@@ -795,6 +828,7 @@ server <- function(input,output,session){
     showNotification("None Linear Dimensional Reduction End of run！", type = "message")
     
   })
+  })
   #Clustering---------------------------------------------
   observe({
     print(values$submit_Clustering)
@@ -805,6 +839,7 @@ server <- function(input,output,session){
     }
   })
   observeEvent(input$submit_Clustering,{
+    run_step("Clustering",{
     id<-showNotification("Clustering Running...", duration = NULL,closeButton = FALSE)
     on.exit(removeNotification(id), add = TRUE)
     clean_Clustering(T)
@@ -860,6 +895,7 @@ server <- function(input,output,session){
      }
     })
   })
+  })
   observe({
     if(!is.null(values$dpDimPlot)){
       shinyjs::enable("submit_GeneActivity")
@@ -869,6 +905,7 @@ server <- function(input,output,session){
   })
   # Create Gene Activity Matrix---------------------------------------------------------------
   observeEvent(input$submit_GeneActivity,{
+    run_step("GeneActivity",{
     progressSweetAlert( session = session,id = "simulationProgress4",
                         title = div("Gene Activity Matrix Running..,",br(),"It will take some time, please be patient and wait..."),
                         display_pct = TRUE,value = 10)
@@ -964,10 +1001,11 @@ server <- function(input,output,session){
     })
     }
   })
-  
+  })
 
   # FindAllMarkers genes/peaks---------------------------------------------
   observeEvent(input$submit_FindAllMarkers,{
+    run_step("FindAllMarkers",{
     clean_Findallmarker(TRUE)
     values$submit_ClusterMarkers<-FALSE
     progressSweetAlert(session = session,id = "simulationProgress5",
@@ -1183,18 +1221,20 @@ server <- function(input,output,session){
     })
     
   })
-  
+  })
   
   #FeaturePlot--------------------------------------------------------
   observeEvent(input$submit_FeaturePlot,{
+    run_step("FeaturePlot",{
     dbFeaturePlot<<-FeaturePlot(object = pbmcs,features = c(input$FeaturePlot_gene_select),
                                pt.size = 0.1, max.cutoff = 'q95')
     output$FeaturePlot <- renderPlot({print(dbFeaturePlot)})
   })
- 
+  })
 
   #Find Cluster Marker----------------------------------------------
   observeEvent(input$submit_FindMarkers,{
+    run_step("FindMarkers",{
     clean_Findmarker(T)
     id<-showNotification("Find Idents Markers Running...", duration = NULL,closeButton = FALSE)
     on.exit(removeNotification(id), add = TRUE)
@@ -1304,6 +1344,7 @@ server <- function(input,output,session){
       }
     })
   })
+  })
   observe({
     selected_row <<- input$CompareMarkers_data_rows_selected
     print(selected_row)
@@ -1345,6 +1386,7 @@ server <- function(input,output,session){
                    choices=type,selected="DatabaseImmuneCell.se")
   })
   observeEvent(input$submit_singleR,{
+    run_step("singleR",{
     id<-showNotification("Cell annotation Running...", duration = NULL,closeButton = FALSE)
     on.exit(removeNotification(id), add = TRUE)
     clean_annotation(TRUE)
@@ -1424,6 +1466,7 @@ server <- function(input,output,session){
     })
     showNotification("Cell annotation End of run！", type = "message")
   })
+  })
   
   
   #Calling peak------------------------------------------------------
@@ -1447,6 +1490,7 @@ server <- function(input,output,session){
         }
   })
   observeEvent(input$AssayRadio3,{
+    run_step("AssayRadio3",{
     if(input$AssayRadio3 == "peaks"){
       print("--------------fd---------------")
       if (!is.null(pbmcs)&&!is.null(pbmcs@assays$peaks) && !is.null(pbmcs@assays$peaks@counts)) {  
@@ -1482,7 +1526,9 @@ server <- function(input,output,session){
         }
       }
   })
+  })
   observeEvent(input$submit_GenomicRegionsPlot,{
+    run_step("GenomicRegionsPlot",{
     # cleanValuebox_four(TRUE)
     id<-showNotification("Plotting genomic regions Running...", duration = NULL,closeButton = FALSE)
     on.exit(removeNotification(id), add = TRUE)
@@ -1594,6 +1640,7 @@ server <- function(input,output,session){
 
     
   })
+  })
   observe({
     print("dsfj------------------dsg------")
     Select_ident<-input$Ident_motif;  
@@ -1656,6 +1703,7 @@ server <- function(input,output,session){
     updateTextAreaInput(session, "Marker_list4", value = open_ident22)
   })
   observeEvent(input$submit_GO_analysis,{
+    run_step("GO_analysis",{
     id<-showNotification("GO analysis Running...", duration = NULL,closeButton = FALSE)
     on.exit(removeNotification(id), add = TRUE)
     cat("\033[31m","  GO analysis! \033[0m\n");
@@ -1794,10 +1842,11 @@ server <- function(input,output,session){
                        type = "warning" )}
     }
     })
-  
+  })
   
   # Motif All Table    >>--------------------------------------------
   observeEvent(input$submit_MotifFindAllMarkers,{
+    run_step("FindAllMarkers",{
     clean_motif_all_table(TRUE)
     motif_markers1<-input$Marker_list1
     print(motif_markers1)
@@ -1887,7 +1936,7 @@ server <- function(input,output,session){
                      text = "Markers is empty. It is recommended to try adjusting the related parameters.",
                      type = "warning" )}
   })
- 
+  })
   # Motif Plot_1---------------------------------------------------
   observe({
     selected_motif1 <<- input$Motif_data1_rows_selected
@@ -1953,6 +2002,7 @@ server <- function(input,output,session){
   })
   
   observeEvent(input$submit_MotifFindMarkers,{
+    run_step("FindMarkers",{
     clean_motif_table(TRUE)
     motif_markers2<<-input$Marker_list2
     print(motif_markers2)
@@ -2018,7 +2068,7 @@ server <- function(input,output,session){
                      type = "warning" )
     }
   })
-   
+  })
   
   # Motif Plot_2---------------------------------------------------
   observe({
@@ -2035,6 +2085,7 @@ server <- function(input,output,session){
   
   # FootPrinting-----------------------------------------------------
   observeEvent(input$submit_FootPrinting,{
+    run_step("Footprinting",{
     progressSweetAlert(session = session,id = "simulationProgress7",
                        title = div("Transcription Factor Footprinting Running.",br(),"It will take some time, please be patient and wait..."),
                        display_pct = TRUE,value =10)
@@ -2157,7 +2208,7 @@ server <- function(input,output,session){
     
     })
   })
-  
+  })
  #下载------------------------------------------------------------------ 
   
   output$DensityScatter_download_plot <- downloadHandler(

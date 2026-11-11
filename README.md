@@ -3,6 +3,16 @@ SignacShiny is an interactive R Shiny application for downstream analysis of pro
 
 ![SignacShiny workflow](www/workflow.svg)
 
+## Data and reproducibility status
+
+The application imports processed scATAC-seq inputs. The server code also reads local files under `data/` for the bundled PBMC example, cached quality-control plots, and SingleR reference datasets. The expected relative paths and SHA-256 hashes are in [DATA_SHA256SUMS.txt](DATA_SHA256SUMS.txt). Place verified files at those exact paths before using the corresponding example or reference feature. A Git LFS pointer is not the data file.
+
+The current repository does **not** yet provide a verified, complete set of these data. At least one referenced LFS object (`data/BlueprintEncode.Rdata`) returned a 404 from the GitHub LFS remote during a fetch check; five other tracked data pointers identify versions different from the server manifest. Do not treat a successful source-code clone as a complete runnable example. The provenance and redistribution permissions of the PBMC objects, cached plots, and reference `.Rdata` files are still being checked. Obtain these files from the project maintainers for authorized testing; their public distribution is a release blocker until provenance and permissions are established.
+
+For a user-supplied processed dataset, upload the peak matrix, fragments file and its `.tbi` index, and cell metadata through the application. The UI provides direct download links for the 10x Genomics PBMC 500 Next GEM example, including its [fragments file](https://cf.10xgenomics.com/samples/cell-atac/1.1.0/atac_pbmc_500_nextgem/atac_pbmc_500_nextgem_fragments.tsv.gz) and [index](https://cf.10xgenomics.com/samples/cell-atac/1.1.0/atac_pbmc_500_nextgem/atac_pbmc_500_nextgem_fragments.tsv.gz.tbi); verify the source terms before redistributing its files. The server manifest lists an optional copy under `data/zc/1/`, but the application does not reference that fixed directory. After obtaining authorized data, verify them from the project root with `sha256sum -c DATA_SHA256SUMS.txt` on Linux, or compare each file with `Get-FileHash -Algorithm SHA256` on Windows. Missing optional entries must be identified separately when checking only the files needed for a chosen workflow.
+
+The server snapshot recorded R 4.4.2, Bioconductor 3.20, Shiny 1.11.1, Signac 1.17.1, Seurat 5.2.1, and SingleR 2.8.0 in `renv.lock`. These are lockfile records, not a live inventory of the server. `JASPAR2020` is imported by `global.R` but was absent from that lockfile. Runtime profiling uses `lobstr` when available and continues without memory figures when it is absent.
+
 ## Local Installation (Optional)
 
 ### 1. Download SignacShiny Source Code
