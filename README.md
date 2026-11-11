@@ -1,24 +1,25 @@
-# SignaShiny
-An interactive R Shiny application for the comprehensive analysis and visualization of single-cell chromatin accessibility data. Leveraging the power of Signac, which integrates seamlessly with the Seurat package for single-cell RNA-seq analysis, SignacShiny offers a user-friendly platform for conducting end-to-end scATAC-seq data analysis. The application supports quality control, cell filtering, dimensionality reduction, clustering, DNA motif analysis, transcription factor footprinting, and interactive data visualization. SignacShiny is the only web server providing a comprehensive Signac-based interface for single-cell chromatin accessibility analysis. Users can upload their data, visualize results in real time, and export analysis outcomes in multiple formats, including PDF, PNG, JPEG, CSV, and TXT.
-![](man/figures/pinpeline.svg) The Shiny application is additionally hosted at <https://xulabgdpu.cpolar.top/Signacshiny>.
+# SignacShiny
+SignacShiny is an interactive R Shiny application for downstream analysis of processed scATAC-seq data. Built on Signac and Seurat, it supports quality control, cell filtering, dimensionality reduction, clustering, differential accessibility, gene activity, cell annotation, genomic region visualization, GO enrichment, motif analysis, and transcription factor footprinting. Alignment and initial peak calling are completed before import.
+
+![SignacShiny workflow](www/workflow.svg)
 
 ## Local Installation (Optional)
 
-### 1. Download Linkage Source Code
+### 1. Download SignacShiny Source Code
 You can obtain the source code in either of the following ways:
   + Clone the GitHub repository:
     ```bash
-    git clone https://github.com/luoyyyy/SignacShiny.git
+    git clone https://github.com/lixiaoxin661-rgb/SignacShiny.git
     ```
     Or
 
-   + Download the ZIP file from: [https://github.com/luoyyyy/SignacShiny  
-      The downloaded folder should be named Linkage-main.
+   + Download the ZIP file from: https://github.com/lixiaoxin661-rgb/SignacShiny
+      The downloaded folder should be named SignacShiny-main.
 
 
 
 
-### 2. Install Required R Packages & Run Linkage
+### 2. Install Required R Packages & Run SignacShiny
 + **Manual Package Installation**    
   1.Open your R or RStudio environment.  
   2.Install the required packages:  
@@ -32,7 +33,7 @@ You can obtain the source code in either of the following ways:
     BiocManager::install(c("MAST", "Seurat", "Signac", "SingleR", "SingleCellExperiment","ggseqlogo","BiocFileCache","AnnotationHub","BiocFileCache",
     "SummarizedExperiment", "Biobase", "MatrixGenerics","S4Vectors", "IRanges","GenomeInfoDb", "GenomicRanges","BiocGenerics","XVector", "Biostrings", "BiocIO", "rtracklayer", "BSgenome","BSgenome.Hsapiens.UCSC.hg19","GenomicFeatures", "AnnotationDbi", "AnnotationFilter", "ensembldb","EnsDb.Hsapiens.v75", "EnsDb.Hsapiens.v86", "EnsDb.Mmusculus.v79","org.Hs.eg.db", "GO.db","BSgenome.Hsapiens.UCSC.hg38","BSgenome.Hsapiens.NCBI.GRCH38", "BSgenome.Hsapiens.UCSC.hg19","BSgenome.Hsapiens.UCSC.mm10","HDO.db","clusterProfiler", "JASPAR2020"))
     ```
-    ℹ️ A complete list of packages and versions can be found in the [sessionInfo](https://github.com/luoyyyy/SignacShiny/blob/main/sessionInfo) file.  
+    ℹ️ A complete list of packages and versions can be found in the [sessionInfo](https://github.com/lixiaoxin661-rgb/SignacShiny/blob/main/sessionInfo) file.
     3.Run the application from the directory:
   
     ```r
@@ -45,3 +46,11 @@ Please do not hesitate to post an issue or contact the authors :
 Siwen Xu: siwxu@gdpu.edu.cn
 
 Yuyan Luo : 1620218029@qq.com
+
+## Version and citation
+
+The source repository is https://github.com/lixiaoxin661-rgb/SignacShiny. Cite the repository and the version or commit used in your analysis. A formal publication citation will be added when available.
+
+## License
+
+This project is distributed under the terms in [LICENSE](LICENSE).

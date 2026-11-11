@@ -14,11 +14,9 @@ ui<-dashboardPage(
 
   
   skin = "yellow",
-  title = "Signac.UIO",
+  title = "SignacShiny",
   header=dashboardHeader(
-    title = shiny::tags$a(img(
-      src = "logo4.png", height = 50
-    )),titleWidth = "240"),
+    title = shiny::tags$span("SignacShiny", style = "font-weight: bold; color: white;"), titleWidth = "240"),
   sidebar = shinydashboard::dashboardSidebar(
     # fluidRow(column(
     # 12,
@@ -36,13 +34,13 @@ ui<-dashboardPage(
           icon = icon("chart-column", lib = "font-awesome")
         ),
         menuItem(
-          "Filter Cell",
+          "Cell Filtering",
           tabName = "ones",
           icon = icon("chart-column", lib = "font-awesome")
         ),
         
         menuItem(
-          "Dim Reduction & Clustering",
+          "Dimensionality Reduction & Clustering",
           tabName = "two",
           icon = icon("chart-column", lib = "font-awesome")
         ),
@@ -50,29 +48,29 @@ ui<-dashboardPage(
                  menuSubItem(" One vs Rest Cluster", tabName = "threeone"),
                  menuSubItem(" One vs One Cluster", tabName = "threetwo")),
         menuItem(
-          "Cell Annotation",
+          "Cell Type Annotation",
           tabName="twos",
           icon=icon("chart-column", lib = "font-awesome")
         ),
         
         menuItem(
-          "Calling Peak",
+          "Genomic Region Visualization",
           tabName = "four",
           icon = icon("chart-column", lib = "font-awesome")
         ),
         menuItem(
-          "GO Analysis",
+          "GO Enrichment Analysis",
           tabName = "five",
           icon = icon("chart-column", lib = "font-awesome")
         ),
         menuItem(" Motif Analysis", icon = icon("table-cells", lib = "font-awesome"), startExpanded = FALSE,tabName= "six",
-                 menuSubItem(" Motif All Table", tabName = "sixone"),
-                 menuSubItem(" Motif Idents Table", tabName = "sixtwo")),
+                 menuSubItem(" Motif Enrichment (One vs Rest)", tabName = "sixone"),
+                 menuSubItem(" Motif Analysis (One vs One)", tabName = "sixtwo")),
         
         
         
         menuItem(
-          "FootPrinting",
+          "Transcription Factor Footprinting",
           tabName = "seven",
           icon = icon("chart-column", lib = "font-awesome")
         ),
@@ -201,14 +199,7 @@ ui<-dashboardPage(
               collapsible = TRUE,
               helpText(
                 div(class="my-custom-div",
-                    strong("Signac.UIO"),
-                    ", an interactive R Shiny application for the",
-                    code("comprehensive analysis and visualization of single-cell chromatin accessibility data"),
-                    "Leveraging the power of Signac, which integrates seamlessly with the Seurat package for single-cell RNA-seq analysis, Signac.UIO offers",
-                    code("a user-friendly platform for conducting end-to-end scATAC-seq data analysis"),
-                    ". The application supports",
-                    code("quality control, cell filtering, dimensionality reduction, clustering, DNA motif analysis, transcription factor footprinting, and interactive data visualization"),
-                    "."
+                "SignacShiny is an interactive R Shiny application for downstream analysis of processed scATAC-seq data. Built on Signac and Seurat, it provides quality control, cell filtering, dimensionality reduction, clustering, differential accessibility and gene activity analysis, cell annotation, genomic region visualization, GO enrichment, motif analysis, and transcription factor footprinting in a graphical workflow. Users can adjust parameters and inspect results without writing R code. Alignment and initial peak calling are completed before import."
                     # style = "font-size:17.5px;font-style:calibri;color:black;",
                     # align = "justify"
                 )
@@ -237,7 +228,7 @@ ui<-dashboardPage(
                    shinydashboard::box(
                      title = tagList(icon("gears"),"Workflow"), width =NULL, solidHeader = F, status = "warning", collapsible = TRUE,
                      align = "center",
-                     shiny::tags$img(src = "workflow.svg",width="100%")
+                     shiny::tags$a(href = "workflow.svg", target = "_blank", shiny::tags$img(src = "workflow.svg", style = "max-width: 100%; height: auto; display: block;"))
                    )))),
         
         tabItem(
@@ -266,17 +257,7 @@ ui<-dashboardPage(
             shinydashboard::box(
               title = tagList(icon("readme"),"Introduction"), width =12, solidHeader = T, status = "warning", collapsible = TRUE,
               helpText(div(class="my-custom-div",
-              "The",
-              strong("Quality Control Module"),
-              "is designed to provide a ",
-              code("comprehensive overview of data quality and facilitate the identification of high-quality cells for downstream analysis"),
-              ". Once the required input files are successfully uploaded, users can click the “Quality Control” button, Signac.UIO automatically calculates a series of key quality control metrics and generate corresponding visualizations, including a ",
-              code("density scatter plot"),
-              "of fragment counts versus TSS enrichment, a",
-              code("TSS enrichment curve"),
-              ", and a",
-              code("nucleosome signal plot"),
-              "."
+              "After processed data are imported, the Quality Control module calculates fragment counts per cell, transcription start site (TSS) enrichment, nucleosome signal, fraction of reads in peaks, and blacklist region ratio. It summarizes data quality using a density scatter plot, a TSS enrichment profile, and a nucleosome banding plot. These views allow users to inspect the calculated metrics before setting cell-filtering thresholds in the next module."
                            
               )),
               div(actionButton("submit_Qualitycontrol","Quality Control", icon = icon("play-circle")), align = "center")
@@ -349,13 +330,7 @@ ui<-dashboardPage(
             shinydashboard::box(
               title = tagList(icon("readme"),"Introduction"), width =12, solidHeader = T, status = "warning", collapsible = TRUE,
               helpText(div(class="my-custom-div",
-                           "The",
-                           strong("Cell Filtration Module"),
-                           "is designed to allow users to",
-                           code("filter out low-quality cells based on key quality control metrics, ensuring that only high-confidence single cells are included in downstream analyses."),
-                           "Signac.UIO supports adjusting various filtering thresholds, including",
-                           code("the minimum and maximum number of fragments per cell, TSS enrichment score, nucleosome signal, maximum blacklist ratio, and minimum percentage of reads in peaks"),
-                           ". After selecting the appropriate thresholds, users clicking the “Cell Filtering” button, they can visualize the distribution of these metrics through interactive plots, enabling them to make data-driven decisions about the optimal filtering parameters."
+                           "The Cell Filtering module displays the calculated quality-control metrics as interactive violin plots. Users can set thresholds for fragment counts, TSS enrichment, nucleosome signal, blacklist region ratio, and fraction of reads in peaks. Before applying the filters, they can inspect the resulting cell-retention statistics. Cells that meet the selected criteria are retained for dimensionality reduction and subsequent analyses."
                            # style = "font-size:17.5px;font-style:calibri;color:black;",
                            # align = "justify"
               )))
@@ -429,11 +404,7 @@ ui<-dashboardPage(
                    shinydashboard::box(
                      title = tagList(icon("readme"),"Introduction"), width =12,  solidHeader = T, status = "warning", collapsible = TRUE,
                      helpText(div(class="my-custom-div",
-                                  "The",
-                                  strong("Dim Reduction and Clustering Module"),
-                                  "provides a comprehensive suite of tools for",
-                                  code("reducing the dimensionality of single-cell chromatin accessibility data and identifying distinct cell populations"),
-                                  ". Users clicking the “Normalization” button, Signac.UIO first performs TF-IDF to transform the high-dimensional peak-by-cell matrix into a lower-dimensional feature space. The number of significant dimensions can be determined by inspecting the DepthCorplot. After adjusting relevant parameters and clicking the “Linear Dimensional Reduction” button, Signac.UIO can perform feature selection and linear dimensionality reduction. After selecting the appropriate number of dimensions, Signac.UIO further applies nonlinear dimensionality reduction methods(UMAP/t-SNE) for data visualization. Once dimensionality reduction is complete, the platform supports multiple clustering algorithms(SLM Algorithm/Original Louvain/Louvain Algorithm with Multilevel Refinement). Users can adjust key clustering parameters (e.g., resolution) and then click the “Clustering” button to perform the clustering analysis and generate DimPlot. Additionally, the module includes a Create Gene Activity Matrix function, leveraging the gene activity scoring approach provided by the Signac package."
+                                  "SignacShiny applies term frequency-inverse document frequency (TF-IDF) normalization followed by singular value decomposition (SVD) to obtain latent semantic indexing (LSI) components. A depth-correlation plot helps users select dimensions for downstream analysis. Selected components are used for UMAP or t-SNE visualization and graph-based clustering. Users can adjust the dimensions and clustering resolution through the interface. The module also calculates a gene activity matrix from accessibility signals associated with gene bodies and promoters for annotation and gene-level analyses."
                                   # style = "font-size:17.5px;font-style:calibri;color:black;",
                                   # align = "justify"
                      )))),
@@ -547,11 +518,7 @@ ui<-dashboardPage(
                    shinydashboard::box(
                      title = tagList(icon("readme"),"Introduction"), width = NULL,height = 235, solidHeader = T, status = "warning", collapsible = TRUE,
                      helpText(div(class="my-custom-div",
-                                  "The",
-                                  strong("Cell Annotation Module"),
-                                  "assigns",
-                                  code("biological identities to the identified cell clusters"),
-                                  ". Signac.UIO includes built-in human and mouse reference datasets from the SingleR package. After selecting the appropriate dataset, users click the “Cell Annotation” button, and the platform automatically calculates cell type probabilities for each cluster based on the gene activity matrix. Results are displayed as annotation tables and labeled clustering plots, providing a clear overview of cell type distributions."
+                                  "SignacShiny uses SingleR to compare scATAC-seq-derived gene activity profiles with a selected transcriptomic reference. The module provides human and mouse reference datasets and returns predicted cell identities with annotation scores. Users can inspect these scores in a table and display predicted labels on a UMAP or t-SNE embedding. The labels provide a preliminary annotation that can be evaluated alongside cluster markers and the chosen reference."
                                   # style = "font-size:17.5px;font-style:calibri;color:black;",
                                   # align = "justify"
                      )
@@ -561,7 +528,7 @@ ui<-dashboardPage(
                      title = tagList(icon("gears"),"Parameter Setting"), width =NULL,height = 235,status = "warning", collapsible = TRUE,
                      div(selectizeInput("reference_type",label="Species Type:",choices=c("Human","Mouse"),selected="Human")),
                      div(uiOutput("Reference_select")),
-                     div(actionButton("submit_singleR","Cell Annotation", icon = icon("play-circle")), align = "center")))
+                     div(actionButton("submit_singleR","Cell Type Annotation", icon = icon("play-circle")), align = "center")))
           ),
           fluidRow(
             column(6,
@@ -607,15 +574,7 @@ ui<-dashboardPage(
           fluidRow(
             column(6,shinydashboard::box(title = tagList(icon("readme"),"Introduction"), width = NULL,height = 280,solidHeader = T, status = "warning", collapsible = TRUE,
                                          helpText(div(class="my-custom-div",
-                                                      "The",                                                      
-                                                      strong("One vs Rest sub-module"),
-                                                      "is designed to ",
-                                                      code("identify marker peaks or genes uniquely enriched in a specific cluster compared to all other clusters"),
-                                                      ". Users can select statistical methods",
-                                                      strong("(Wilcox/LR/bimod/ROC/MAST)"),
-                                                      "and set key parameters like",
-                                                      strong("minimum detection rate and fold change threshold"),
-                                                      ". After setting the parameters and clicking the button, the platform automatically performs differential analysis and presents the results in an interactive table, including key statistics such as fold change, adjusted p-value, and the proportion of cells in each cluster. Additionally, the module can generate feature plots."
+                                                      "The One vs Rest module compares a selected cluster with all remaining cells to identify differentially accessible peaks or differences in gene activity scores. Users can select a supported statistical test and set a minimum detection frequency and fold-change threshold. The results table reports effect sizes, adjusted P-values, and detection fractions. Selected features can be examined in feature-level plots."
                                                       # style = "font-size:17.5px;font-style:calibri;color:black;",
                                                       # align = "justify"
                                          )))),
@@ -709,15 +668,7 @@ ui<-dashboardPage(
             column(6,
                    shinydashboard::box(title = tagList(icon("readme"),"Introduction"), width = NULL, height=330,solidHeader = T, status = "warning", collapsible = TRUE,
                                        helpText(div(class="my-custom-div",
-                                                    "The",
-                                                    strong("One vs One sub-module"),
-                                                    "is designed to ",
-                                                    code("identify differentially accessible peaks or differentially active genes between two selected clusters"),
-                                                    ". Users can select statistical method",
-                                                    strong("(Wilcox/LR/bimod/ROC/MAST)"),
-                                                    "and set key arguments like",
-                                                    strong("minimum detection rate and fold change threshold"),
-                                                    ". After setting the parameters and clicking the button, the platform automatically performs differential analysis and presents the results in an interactive table, including key statistics such as fold change, adjusted p-value, and the proportion of cells in each cluster.Users can also select specific peaks from the table, with the panel simultaneously displaying violin plots and feature plots of gene expression or chromatin accessibility related to the selected peak."
+                                                    "The One vs One module compares two user-selected clusters for differential accessibility or differences in gene activity scores. Users can choose a supported statistical test and specify minimum detection frequency and fold-change thresholds. The results table presents effect sizes, adjusted P-values, and detection fractions. Selected peaks or gene activity features can then be inspected in violin or feature plots, depending on the assay used."
                                                     # style = "font-size:17.5px;font-style:calibri;color:black;",
                                                     # align = "justify"
                                        )))),
@@ -800,13 +751,7 @@ ui<-dashboardPage(
             shinydashboard::box(
               title = tagList(icon("readme"),"Introduction"), width = 12, solidHeader = T, status = "warning", collapsible = TRUE,
               helpText(div(class="my-custom-div",
-                           "The",
-                           strong("Peaks Visualization Module"),
-                           "enables users to",
-                           code("visualize chromatin accessibility tracks for specific genomic regions, providing insights into the regulatory landscape of single-cell ATAC-seq data"),
-                           ". Users can customize the genomic regions that they wish to visualize by specifying their regions of interest as individual peaks or genes and adjusting the display range accordingly.When users click the “Genomic Regions plot” button, Signac.UIO generates ",
-                           strong("the pseudo-bulk accessibility tracks"),
-                           "along with violin plots showing the expression levels of genes present within the selected genomic region."
+                           "The Genomic Region Visualization module uses Signac CoveragePlot() to display chromatin accessibility across selected genes, peaks, or genomic coordinates. Accessibility signals from cells in the same cluster or annotated cell type are aggregated into pseudo-bulk tracks for comparison of locus-specific patterns. Gene annotations are overlaid on the tracks, and gene activity distributions can be shown alongside the regional accessibility profiles. Initial peak calling is completed upstream and is not performed in this module."
               )))
           ),
           fluidRow(
@@ -865,10 +810,7 @@ ui<-dashboardPage(
             shinydashboard::box(
               title = tagList(icon("readme"),"Introduction"), width = 12,solidHeader = T, status = "warning", collapsible = TRUE,
               helpText(div(class="my-custom-div",
-                           strong("The Motif All Table sub-module"),
-                           "enables users to ",
-                           code("identify transcription factor (TF) binding motifs that are specifically enriched in differentially accessible regions across cell clusters, providing insights into the upstream regulatory mechanisms that drive chromatin accessibility differences"),
-                           ", which corresponds to the “One vs Rest Cluster” analysis. By clicking on “Motif Aalysis” button, users can view the location and binding score information of each enriched TFBS of this DNA region from the Motif Scanning Table. Once users select one TFBS of this table, the corresponding sequence logo will appear in the Sequence-logo Plot panel."
+                           "This module uses JASPAR motif annotations to assess transcription factor motif enrichment among differentially accessible peaks from a one-versus-rest comparison. Candidate motifs are presented in a results table, and a sequence logo for a selected motif shows its nucleotide preferences. Motif enrichment supports exploratory interpretation of regulatory factors but does not establish transcription factor binding at an individual site."
                            # style = "font-size:17.5px;font-style:calibri;color:black;",
                            # align = "justify"
               )))
@@ -966,11 +908,7 @@ ui<-dashboardPage(
             shinydashboard::box(
               title = tagList(icon("readme"),"Introduction"), width = 12,solidHeader = T, status = "warning", collapsible = TRUE,
               helpText(div(class="my-custom-div",
-                           "The",
-                           strong("Motif Idents Table sub-module"),
-                           "enables users to ",
-                           code("identify transcription factor (TF) binding motifs that are specifically enriched in differentially accessible regions between two selected cell clusters, providing insights into the upstream regulatory mechanisms that drive chromatin accessibility differences"),
-                           ", which corresponds to the “One vs One Cluster” analysis. By clicking on “Motif Idents Analysis” button, users can view the location and binding score information of each enriched TFBS of this DNA region from the Motif Scanning Table. Once users select one TFBS of this table, the corresponding sequence logo will appear in the Sequence-logo Plot panel."
+                           "This module examines JASPAR transcription factor motifs in differentially accessible peaks identified between two selected clusters. It presents candidate motifs and allows users to inspect a sequence logo for a selected motif. The motif results are intended to support exploratory regulatory interpretation of the pairwise differential accessibility analysis; enrichment statistics and individual motif matches should be distinguished in the displayed table."
                            # style = "font-size:17.5px;font-style:calibri;color:black;",
                            # align = "justify"
               )))
@@ -1065,15 +1003,7 @@ ui<-dashboardPage(
             shinydashboard::box(
             title = tagList(icon("readme"),"Introduction"), width = 12, solidHeader = T, status = "warning", collapsible = TRUE,
             helpText(div(class="my-custom-div",
-                         "The",
-                         strong("Pathway Enrichment Module"),
-                         " enables users to ",
-                         code("perform Gene Ontology (GO) enrichment analysis based on the results of differential accessibility peaks or differentially active genes, with the goal of identifying biological pathways enriched in specific cell types"),
-                         ". Users can adjust relevant thresholds (such as p-value and q-value) and then click the “GO analysis” button. The platform will execute the GO enrichment analysis, with results presented as a ",
-                         strong("GO enrichment table and GO bar plot"),
-                         ".To accommodate different experimental designs, ",
-                         strong("the module supports both “One vs Rest” and “One vs One” comparison modes"),
-                         ", corresponding to the settings used in the Differential Peaks/Genes Module."        
+                         "The GO Analysis module uses clusterProfiler to assess Gene Ontology enrichment for genes associated with differentially accessible regions or differential gene activity. Users can select one-versus-rest or pairwise results and set significance thresholds. Enriched GO terms are summarized in a table and graphical outputs, including a bar plot. These results support functional interpretation of the selected gene set."
                          # style = "font-size:17.5px;font-style:calibri;color:black;",
                          # align = "justify"
             )))
@@ -1177,11 +1107,7 @@ ui<-dashboardPage(
             shinydashboard::box(
               title = tagList(icon("readme"),"Introduction"), width = 12, solidHeader = T, status = "warning", collapsible = TRUE,
               helpText(div(class="my-custom-div",
-                           "The",
-                           strong("TF Footprinting Module"),
-                           "builds",
-                           code("upon motif enrichment results to further assess transcription factor (TF) binding activity across different cell populations"),
-                           ". Users can select motifs of interest, and then click the “FootPringting analysis” button. The platform will compute and visualize Tn5 insertion patterns around specific motif regions and compare footprint profiles across clusters or cell types. By integrating sequence-level motif information with chromatin accessibility signals, this module offers a fine-grained view of transcriptional regulation within single-cell ATAC-seq data."
+                           "The Transcription Factor Footprinting module examines putative transcription factor occupancy patterns using aggregated Tn5 insertion profiles around selected motif instances. Users can select motifs and cell populations of interest and compare normalized footprint profiles across groups. The plots provide evidence complementary to motif enrichment for interpreting candidate regulatory factors. A footprint is an accessibility-based pattern and does not directly measure transcription factor binding."
                            # style = "font-size:17.5px;font-style:calibri;color:black;",
                            # align = "justify"
               )))),
@@ -1197,10 +1123,10 @@ ui<-dashboardPage(
             #        )),
             # column(8,
                    shinydashboard::box(
-                     title =tagList(icon("chart-column"),"FootPrinting Plot"), width = 12, status = "warning", collapsible = TRUE,
+                     title =tagList(icon("chart-column"),"Transcription Factor Footprinting Plot"), width = 12, status = "warning", collapsible = TRUE,
                      selectizeInput(inputId = "genes_selected1", label = "Motif Name:",choices = list("NULL"="NULL"),selected="NULL",
                                     multiple = T,options = NULL),
-                     div(actionButton("submit_FootPrinting","FootPrinting analysis", icon = icon("play-circle")), align = "center"),
+                     div(actionButton("submit_FootPrinting","Transcription Factor Footprinting", icon = icon("play-circle")), align = "center"),
                      plotOutput("FootPrintingPlot",width="100%")%>%withSpinner(),
                      splitLayout(cellWidths = c("30%","30%","40%"),
                                  numericInput("FootPrinting_PlotWidth", "Width", min = 0, max = 250, value = 12),
@@ -1213,7 +1139,8 @@ ui<-dashboardPage(
           tabName = "eight",
           fluidRow(
             shinydashboard::box(
-              title = tagList(icon("readme"),"Introduction"), width = 12, solidHeader = T, status = "warning", collapsible = TRUE,
+              title = tagList(icon("readme"),"Help"), width = 12, solidHeader = T, status = "warning", collapsible = TRUE,
+              helpText("Import processed scATAC-seq data, then use the modules in the sidebar to review quality control, filter cells, and run downstream analyses. Alignment and initial peak calling must be completed before import. Source code and issues: https://github.com/lixiaoxin661-rgb/SignacShiny.")
               )
             
           )
@@ -1240,7 +1167,7 @@ ui<-dashboardPage(
                                 line-height:1.5;
                                 baseline：middle;'>",
                 "<b>Code Availability</b>",
-                "<br>The source code for Signac.UIO can be found in ","<a  href = 'https://github.com/luoyyyy/Signac.UIO' target='_blank'>this</a>"," repository.",
+                "<br>The source code for SignacShiny can be found in ","<a  href = 'https://github.com/lixiaoxin661-rgb/SignacShiny' target='_blank'>this</a>"," repository.",
                 "</p>"
               )))
             
@@ -1252,11 +1179,11 @@ ui<-dashboardPage(
   footer=dashboardFooter(
     div(
       # class = "footer",
-      img(src = "logo3.png", style = "position:absolute;left:250px;bottom:0px;height:100px"),
+      span("SignacShiny", style = "position:absolute;left:250px;bottom:15px;font-size:24px;font-weight:bold"),
       img(src = "yh.png", style = "position:absolute;bottom:0px;height:60px;right:0px"),
       HTML(paste0(  "</br><p style = ' text-align: center;font-size:1.0em; color: black; line-height: 10%;'>",
                     "<b>Created by</b>: XuLabGDPU | ",
-                    "<b>Last update</b>: 29/01/2024",
+                    "<b>Software</b>: SignacShiny",
                     "</p>",
                     "</br><p style = 'text-align: center; font-size:1.0em; color: black; line-height: 10%;'>",
                     "<b>Address</b>: No. 160, Outer Ring East Road, Panyu District, Guangzhou City, Guangdong Province, China | ",
@@ -1265,7 +1192,7 @@ ui<-dashboardPage(
                     "</br><p style = 'text-align: center; font-size:1.0em; line-height: 10%;'> ",
                     # "<a  href = 'https://github.com/lthevenard/dt_exercises'target='_blank'>Github</a> | ",
                     "<a  href = 'https://www.xulabgdpu.org.cn'target='_blank'>XuLabGDPU</a> | ",
-                    "<a  href = 'https://www.xulabgdpu.org.cn/signacShiny'target='_blank'>ShinySignac.UiO</a> |",
+                    "<a  href = 'https://www.xulabgdpu.org.cn/signacShiny'target='_blank'>SignacShiny</a> |",
                     "<a  href = 'https://www.gdpu.edu.cn/'target='_blank'>Guangdong Pharmaceutical University</a> |",
                     "<a href='https://beian.miit.gov.cn/' target='_blank'>黑ICP备2024016624</a>",
                     "</p>"))

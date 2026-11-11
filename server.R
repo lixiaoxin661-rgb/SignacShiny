@@ -122,7 +122,7 @@ server <- function(input,output,session){
       vbox_filter_cell = renderValueBox({
         color<-if (!is.null(qcVlnPlots)) "yellow" else "orange"
         icon_name <- if (!is.null(qcVlnPlots)) "check" else "hourglass-half"
-        valueBox(value=NULL,subtitle =tags$p("Filter Cell",style = "font-size:14px;font-weight:bold"),
+        valueBox(value=NULL,subtitle =tags$p("Cell Filtering",style = "font-size:14px;font-weight:bold"),
                  color=color,icon = icon(icon_name,style = "font-size: 25px"))}),
       vbox_NDR=renderValueBox({
         color<-if (!is.null(values$dpDimPlot)) "yellow" else "orange"
@@ -153,7 +153,7 @@ server <- function(input,output,session){
       vbox_calling_peak=renderValueBox({
         color<-if (!is.null(grGenomicRegionsPlot)) "yellow" else "orange"
         icon_name <- if (!is.null(grGenomicRegionsPlot)) "check" else "hourglass-half"
-        valueBox(value = NULL,subtitle =tags$p("Calling Peak",style="font-size:14px;font-weight:bold"),
+        valueBox(value = NULL,subtitle =tags$p("Genomic Region Visualization",style="font-size:14px;font-weight:bold"),
                  color=color,icon = icon(icon_name,style = "font-size: 25px"))}),
       vbox_GO_plot=renderValueBox({
         color<-if (!is.null(ident1_ego1)) "yellow" else "orange"
@@ -163,12 +163,12 @@ server <- function(input,output,session){
       vbox_motifs_analysis=renderValueBox({
         color<-if (!is.null(enriched.motifs1)) "yellow" else "orange"
         icon_name <- if (!is.null(enriched.motifs1)) "check" else "hourglass-half"
-        valueBox(value = NULL,subtitle =tags$p("Motif All Table",style="font-size:14px;font-weight:bold"),
+        valueBox(value = NULL,subtitle =tags$p("Motif Enrichment (One vs Rest)",style="font-size:14px;font-weight:bold"),
                  color=color,icon = icon(icon_name,style = "font-size: 25px"))}),
       vbox_motifs_ident_analysis=renderValueBox({
         color<-if (!is.null(enriched.motifs2)) "yellow" else "orange"
         icon_name <- if (!is.null(enriched.motifs2)) "check" else "hourglass-half"
-        valueBox(value = NULL,subtitle =tags$p("Motif Idents Table",style="font-size:14px;font-weight:bold"),
+        valueBox(value = NULL,subtitle =tags$p("Motif Analysis (One vs One)",style="font-size:14px;font-weight:bold"),
                  color=color,icon = icon(icon_name,style = "font-size: 25px"))}),
       vbox_footprint=renderValueBox({
         color<-if (!is.null(fpFootPrintingPlot)) "yellow" else "orange"
@@ -2036,10 +2036,10 @@ server <- function(input,output,session){
   # FootPrinting-----------------------------------------------------
   observeEvent(input$submit_FootPrinting,{
     progressSweetAlert(session = session,id = "simulationProgress7",
-                       title = div("FootPrinting Running.",br(),"It will take some time, please be patient and wait..."),
+                       title = div("Transcription Factor Footprinting Running.",br(),"It will take some time, please be patient and wait..."),
                        display_pct = TRUE,value =10)
     Sys.sleep(0.8)
-    id<-showNotification("FootPrinting Running...", duration = NULL,closeButton = FALSE)
+    id<-showNotification("Transcription Factor Footprinting Running...", duration = NULL,closeButton = FALSE)
     on.exit(removeNotification(id), add = TRUE)
     motifs1 <<- names(unlist(pbmcs[["peaks"]]@motifs@motif.names)[match(unlist(strsplit(input$genes_selected1,",")),unlist(pbmcs[["peaks"]]@motifs@motif.names))])
     for (i in 10:25) {
@@ -2151,9 +2151,9 @@ server <- function(input,output,session){
       }
     closeSweetAlert(session = session)
     sendSweetAlert(session = session,title = "DONE",
-                   text = "FootPrinting is completed!",
+                   text = "Transcription Factor Footprinting is completed!",
                    type = "success")
-    showNotification("FootPrinting End of run！", type = "message")
+    showNotification("Transcription Factor Footprinting End of run！", type = "message")
     
     })
   })
