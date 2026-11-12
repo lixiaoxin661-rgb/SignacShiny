@@ -122,6 +122,8 @@ server <- function(input,output,session){
   metadata <- reactiveVal(NULL)
   MotifMarkers2<- reactiveVal(NULL)
   MotifMarkers1<- reactiveVal(NULL)
+  markers_result_updated <- reactiveVal(0L)
+  pairwise_result_updated <- reactiveVal(0L)
   values<-reactiveValues(deDepthCorPlot=NULL)
   values<-reactiveValues(Normalization=NULL)
   # values<-reactiveValues(submit_GeneActivity=FALSE)
@@ -1070,6 +1072,7 @@ server <- function(input,output,session){
       colnames(FindAllMarkers_result)[7] <- "Marker"
       FindAllMarkers_result <- FindAllMarkers_result[, c("Marker","p_val", "avg_log2FC", "pct.1", "pct.2", "p_val_adj", "cluster")]
          }
+    markers_result_updated(markers_result_updated() + 1L)
     for (i in 70:90) {
       updateProgressBar(
         session = session,
@@ -1272,6 +1275,7 @@ server <- function(input,output,session){
       FindMarkers_result1[sapply(FindMarkers_result1,is.numeric)] <- round(FindMarkers_result1[sapply(FindMarkers_result1,is.numeric)],4)
       FindMarkers_result1$Marker<-rownames(FindMarkers_result1)
       FindMarkers_result<- FindMarkers_result1[, c("Marker","p_val", "avg_log2FC", "pct.1", "pct.2", "p_val_adj")]
+      pairwise_result_updated(pairwise_result_updated() + 1L)
       
       output$CompareMarkers_data <- DT::renderDataTable({
         datatable(data = FindMarkers_result,selection = 'single',rownames = FALSE,
@@ -1648,15 +1652,18 @@ server <- function(input,output,session){
   })
   observe({
     print("dsfj------------------dsg------")
+    markers_result_updated()
     Select_ident<-input$Ident_motif;  
     Pvalue <- input$Pvalue
-    if(!is.null(FindAllMarkers_result)){
+    if(!is.null(FindAllMarkers_result) && identical(assay1, "peaks")){
     MotifMarkers1(FindAllMarkers_result[FindAllMarkers_result$cluster==Select_ident&
                                           FindAllMarkers_result$p_val_adj<Pvalue,])
     MotifTopMarkers1<<-MotifMarkers1()
     marker_list_str <- paste(MotifTopMarkers1$gene, collapse = "\n")
     updateTextAreaInput(session,"Marker_list1","Marker List:",
                         value = marker_list_str)
+    } else {
+      updateTextAreaInput(session,"Marker_list1","Marker List:", value = "")
     }
   })
   
@@ -1971,9 +1978,10 @@ server <- function(input,output,session){
   #Motif idents table---------------------------------------------------------
   observe({
     print("dsfj1------------------dsg------")
+    pairwise_result_updated()
     selected_idents3 <- input$Ident41
     print(selected_idents3)
-    if(!is.null(FindMarkers_result1)){
+    if(!is.null(FindMarkers_result1) && identical(assay2, "peaks")){
       if(!is.null(selected_idents3)){
          if(selected_idents3==input$Ident11){
         print("ident1")
@@ -2016,6 +2024,8 @@ server <- function(input,output,session){
       }
         
       }
+    } else {
+      updateTextAreaInput(session,"Marker_list2","Marker List:", value = "")
     }
   })
   

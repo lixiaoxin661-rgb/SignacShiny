@@ -12,7 +12,7 @@ The interface contains 12 analysis pages with manuscript-aligned descriptions an
 
 ## System requirements and installation
 
-The server snapshot lockfile records R 4.4.2 and Bioconductor 3.20. Package names and preliminary install commands are in `README.md`. The lockfile is a historical baseline and does not yet constitute a complete, independently verified restore recipe. The personal stage reportedly uses ggplot2 4.0.3, patchwork 1.3.2, TFBSTools 1.44.0, motifmatchr 1.28.0, DirichletMultinomial 1.48.0, and JASPAR2020 0.99.10; exact live package inventory and system library linkage remain to be captured. A complete release must state and verify the final runtime requirements.
+The server snapshot lockfile records R 4.4.2 and Bioconductor 3.20. Package names and preliminary install commands are in `README.md`. The lockfile is a historical baseline and does not yet constitute a complete, independently verified restore recipe. A personal-stage namespace check found R 4.4.2, shiny 1.10.0, Signac 1.17.1, Seurat 5.2.1, SingleR 2.8.0, ggplot2 4.0.3, patchwork 1.3.2, TFBSTools 1.44.0, motifmatchr 1.28.0, DirichletMultinomial 1.48.0, JASPAR2020 0.99.10, and ggseqlogo 0.2.2. The lockfile records a different shiny version. Full package inventory and system library linkage remain to be captured. A complete release must state and verify the final runtime requirements.
 
 ## Example data requirements
 

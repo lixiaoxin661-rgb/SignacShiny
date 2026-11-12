@@ -301,7 +301,6 @@ conditionalPanel(
 ),
 uiOutput("FileInputs"),
 
-                     helpText('If "Custom Data" is selected, four upload fields will appear below: matrix, fragments, index, and metadata.'),
                      br(),
                      div(actionButton("submit_Start","Start", icon = icon("play-circle")), align = "center")
 

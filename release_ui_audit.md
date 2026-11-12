@@ -5,17 +5,17 @@
 | PPT 页 | 模块 | 最终位置 | 文字逐字核对 | 论文功能 |
 |---|---|---|---|---|
 | 1 | Home | `ui.R:273` | 通过 | Home |
-| 2 | Quality Control | `ui.R:343` | 通过 | Quality Control |
-| 3 | Cell Filtering | `ui.R:416` | 通过 | Cell Filtering |
-| 4 | Dimensionality Reduction & Clustering | `ui.R:490` | 通过 | Dimensionality Reduction & Clustering |
-| 5 | One vs Rest | `ui.R:660` | 通过 | One vs Rest |
-| 6 | One vs One | `ui.R:754` | 通过 | One vs One |
-| 7 | Cell Type Annotation | `ui.R:604` | 通过 | Cell Type Annotation |
-| 8 | Genomic Region Visualization | `ui.R:837` | 通过 | Genomic Region Visualization |
-| 9 | GO Enrichment Analysis | `ui.R:1089` | 通过 | GO Enrichment Analysis |
-| 10 | Motif Enrichment (One vs Rest) | `ui.R:896` | 通过 | Motif Enrichment (One vs Rest) |
-| 11 | Motif Analysis (One vs One) | `ui.R:994` | 通过 | Motif Analysis (One vs One) |
-| 12 | Transcription Factor Footprinting | `ui.R:1193` | 通过 | Transcription Factor Footprinting |
+| 2 | Quality Control | `ui.R:342` | 通过 | Quality Control |
+| 3 | Cell Filtering | `ui.R:415` | 通过 | Cell Filtering |
+| 4 | Dimensionality Reduction & Clustering | `ui.R:489` | 通过 | Dimensionality Reduction & Clustering |
+| 5 | One vs Rest | `ui.R:659` | 通过 | One vs Rest |
+| 6 | One vs One | `ui.R:753` | 通过 | One vs One |
+| 7 | Cell Type Annotation | `ui.R:603` | 通过 | Cell Type Annotation |
+| 8 | Genomic Region Visualization | `ui.R:836` | 通过 | Genomic Region Visualization |
+| 9 | GO Enrichment Analysis | `ui.R:1088` | 通过 | GO Enrichment Analysis |
+| 10 | Motif Enrichment (One vs Rest) | `ui.R:895` | 通过 | Motif Enrichment (One vs Rest) |
+| 11 | Motif Analysis (One vs One) | `ui.R:993` | 通过 | Motif Analysis (One vs One) |
+| 12 | Transcription Factor Footprinting | `ui.R:1192` | 通过 | Transcription Factor Footprinting |
 
 ## 逐页最终英文
 
