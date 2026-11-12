@@ -730,8 +730,9 @@ server <- function(input,output,session){
     values$deDepthCorPlot <<- DepthCor(pbmcs_1,n=50)+theme(plot.title = element_text(size = rel(1)))
     # 修改 y 轴刻度
     values$deDepthCorPlot <- values$deDepthCorPlot + scale_x_continuous(limits = c(0, 50), breaks = seq(0, 50, by = 5))
-    output$DepthCorPlot <- renderPlotly({
-      print(plotly::ggplotly(values$deDepthCorPlot))
+    output$DepthCorPlot <- renderPlot({
+      req(values$deDepthCorPlot)
+      print(values$deDepthCorPlot)
     })
     
     #updateActionButton(session, "submit_NLDR", disabled = FALSE)  
@@ -1905,6 +1906,10 @@ server <- function(input,output,session){
                                           total = 100);Sys.sleep(0.1)}
       set.seed(1234)
       enriched.motifs1 <<- FindMotifs(object = pbmcs,features = MotifTopMarkers1)
+      if (is.null(enriched.motifs1) ||
+          nrow(enriched.motifs1) == 0) {
+        stop("FindMotifs returned no motif results")
+      }
       enriched.motifs1[sapply(enriched.motifs1,is.numeric)] <<- round(enriched.motifs1[sapply(enriched.motifs1,is.numeric)],4)
       for (i in 80:90) {updateProgressBar(session = session,
                                           id = "simulationProgress6",
@@ -1918,8 +1923,17 @@ server <- function(input,output,session){
                            columnDefs = list(list(width="80px",targets ='_all'),list(className = 'dt-left',targets = "_all")),
                            scrollX = TRUE))})
       
-  },error = function(e){
-      print(e)
+  }, error = function(e) {
+      msg <- conditionMessage(e)
+      message("[SIGNAC_MOTIF_ALL_ERROR] ", msg)
+      closeSweetAlert(session = session)
+      sendSweetAlert(
+        session = session,
+        title = "Motif analysis failed",
+        text = msg,
+        type = "error"
+      )
+      stop(e)
   })
   cat("\033[31m","  MotifTable1! \033[0m\n");
   shinyjs::enable(selector = ".sidebar li a[data-value='seven']")
@@ -1945,7 +1959,7 @@ server <- function(input,output,session){
   observe({
     selected_motif1 <<- input$Motif_data1_rows_selected
     if(!is.null(selected_motif1)){
-      motifs_1 <<- rownames(enriched.motifs1[selected_motif1,])
+      motifs_1 <<- rownames(enriched.motifs1)[selected_motif1]
       mtMotifPlot1 <<- MotifPlot(pbmcs,motifs = motifs_1,ncol=2)
       output$MotifPlot1 <- renderPlot({print(mtMotifPlot1)})
     }
@@ -2078,7 +2092,7 @@ server <- function(input,output,session){
   observe({
     selected_motif2<<- input$Motif_data2_rows_selected
     if(!is.null(selected_motif2)){
-      motifs_2 <<- rownames(enriched.motifs2[selected_motif2,])
+      motifs_2 <<- rownames(enriched.motifs2)[selected_motif2]
       mtMotifPlot2 <<- MotifPlot(pbmcs,motifs = motifs_2,ncol=2)
       output$MotifPlot2 <- renderPlot({print(mtMotifPlot2)})
     }

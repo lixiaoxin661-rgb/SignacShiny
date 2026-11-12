@@ -1,6 +1,6 @@
 # Personal server stage browser test — 2026-11-12
 
-Test target: the owner's forwarded personal Shiny instance at `http://127.0.0.1:3846/`, not the formal public website. The stage source is under `/users/xiaoxli/SignacShiny-stage/SignacShiny-chore-manuscript-ui-release`. Its source files and commit have not yet been matched byte-for-byte against this Git branch, so the following results apply to the **running stage**, not automatically to a future GitHub Release.
+Test target: the owner's forwarded personal Shiny instances at `http://127.0.0.1:3846/` and `http://127.0.0.1:3848/`, not the formal public website. The stage source is under `/users/xiaoxli/SignacShiny-stage/SignacShiny-chore-manuscript-ui-release`. The owner later supplied its four core R files and the two introduction-style assets. The release branch now carries the stage's analysis logic and layout, with only corrected visible wording in `ui.R`/`server.R`; the merged commit still requires an independent startup check before release.
 
 | Function | Result | Direct observation |
 |---|---|---|
@@ -21,6 +21,6 @@ Test target: the owner's forwarded personal Shiny instance at `http://127.0.0.1:
 | Footprinting | PASS for default ALX3 computation and PNG download on port 3848 | Clicked the analysis button, saw completion, then a nonempty multi-group curve plot labeled MA0634.1. PNG download was 11,912,708 bytes with a valid PNG signature and SHA-256 `652a97076b7d99d4e316e44c4bd6f5e54697d0a3175a56cfd92d7c67de536c4d`. This validates one motif on the personal stage, not all motifs. |
 | Motif One vs One, Custom Data upload, all other downloads | NOT TESTED | Four-file upload, t-SNE, Motif One vs One, other motif outputs and remaining plot formats need independent tests. |
 
-The running page still had a few visible label typos in progress cards and plot titles. The local Git branch corrects `Greate/Creat Gene Activity Matrix`, `Dim Reduction &Clustering`, `Foot Printing`, and `GenomicReginsPlot` without changing IDs, algorithms or parameters. These local fixes have **not** been deployed to the tested stage.
+The running page still had a few visible label typos in progress cards and plot titles. The Git branch corrects `Greate/Creat Gene Activity Matrix`, `Dim Reduction &Clustering`, `Foot Printing`, and `GenomicReginsPlot` without changing IDs, algorithms or parameters. These wording fixes have **not** been deployed to the tested stage.
 
 No formal server directory was changed. The result files downloaded for verification are outside the Git repository and are not publication assets.

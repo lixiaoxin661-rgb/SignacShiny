@@ -141,12 +141,7 @@ ui<-dashboardPage(
             font-size: 14px
     }
 
-       .sidebar {
-        position: fixed;
-        top: 50px;
-        bottom: 0;
-        width:240px;
-      }
+
 
       /*固定标题*/
         .skin-yellow .main-header .logo{
@@ -162,8 +157,59 @@ ui<-dashboardPage(
         )
     ))),
   body=dashboardBody(
+
+tags$head(tags$style(HTML("
+  .box .box-body {
+    padding: 8px 10px 10px;
+  }
+  .box {
+    margin-bottom: 12px;
+  }
+  .shiny-plot-output {
+    max-width: 100%;
+  }
+"))),
+
+    tags$head(
+      tags$link(rel="stylesheet", href="intro_emphasis.css"),
+      tags$script(src="intro_emphasis.js")
+    ),
+
+    tags$head(tags$style(HTML("
+      /* SIGNAC_INTRO_STYLE_V1 */
+
+      .my-custom-div {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 16.5px;
+        line-height: 1.75;
+        color: #303840;
+        text-align: justify;
+        word-spacing: normal;
+      }
+
+      .my-custom-div strong {
+        color: #243B53;
+        font-family: inherit;
+        font-weight: 700;
+      }
+
+      .my-custom-div code {
+        color: #A56613 !important;
+        font-family: inherit !important;
+        font-size: inherit !important;
+        font-weight: 600;
+        line-height: inherit;
+        background: transparent !important;
+        border: none !important;
+        border-radius: 0;
+        padding: 0 !important;
+        white-space: normal;
+      }
+    "))),
+
     shiny::tags$div(style = "height: 50px;"),
     useShinyjs(),
+
     div(
       id="content-container",
       class="content-wrapper",
@@ -186,7 +232,32 @@ ui<-dashboardPage(
                            background-color:  #F39C12 !important;     
                            text-align:center; /* Optional: center text inside the box */
                             }
-               .small-box.bg-orange { background-color: #ffc916 !important;  }"))),
+               .small-box.bg-orange { background-color: #ffc916 !important;  }
+               .box-body { padding: 8px 10px 10px 10px; }
+               .plot-fill { width: 100%; }
+               .plot-fill .shiny-plot-output,
+               .plot-fill .plotly,
+               .plot-fill .html-widget {
+                   width: 100% !important;
+               }
+               .plot-fill img {
+                   max-width: 100%;
+               }
+               .my-custom-div code,
+               .my-custom-div .intro-hit {
+                   color: #9a5b00;
+                   background: #fff1d6;
+                   padding: 1px 5px;
+                   border-radius: 4px;
+                   font-weight: 700;
+               }
+               .my-custom-div strong {
+                   color: #7a3f00;
+               }
+               .box.box-warning { margin-bottom: 12px; }
+               .content-wrapper, .right-side {
+                   min-height: 100vh;
+               }"))),
       tabItems(
         tabItem(
           tabName = "strat",
@@ -219,9 +290,21 @@ ui<-dashboardPage(
                      
                      selectInput("Selectdata", label = ("Data Source："), choices = list("Example Data","Custom Data"),selected = "Example Data"),
                      selectInput("SelectRefer_data", label = "Reference Dataset:", choices = list("EnsDb.Hsapiens.v75","EnsDb.Hsapiens.v86","EnsDb.Mmusculus.v79"),selected = "EnsDb.Hsapiens.v75"),
-                     uiOutput("FileInputs"),
+
+conditionalPanel(
+  condition="input.Selectdata == 'Custom Data'",
+  tags$p(
+    style="color:#986017;font-weight:600;",
+    "Upload the peak matrix, fragments (.tsv.gz), ",
+    "fragment index (.tbi), and metadata (.csv)."
+  )
+),
+uiOutput("FileInputs"),
+
+                     helpText('If "Custom Data" is selected, four upload fields will appear below: matrix, fragments, index, and metadata.'),
                      br(),
                      div(actionButton("submit_Start","Start", icon = icon("play-circle")), align = "center")
+
                      
                    )),
             column(8,
@@ -268,7 +351,7 @@ ui<-dashboardPage(
                    
                    shinydashboard::box(
                      title = tagList(icon("chart-column"),"DensityScatter"), width =NULL,status = "warning", collapsible = TRUE,
-                     plotOutput("QCDSPlot",width="100%")%>%withSpinner(),
+                     div(class="plot-fill", plotOutput("QCDSPlot", width="100%", height="480px") %>% withSpinner()),
                      splitLayout(cellWidths = c("30%","30%","40%"),
                                  numericInput("DensityScatter_PlotWidth", "Width", min = 0, max = 250,value = 10),
                                  numericInput("DensityScatter_PlotHeight", "Height", min = 0, max = 250, value = 7),
@@ -281,7 +364,7 @@ ui<-dashboardPage(
                      tabPanel(
                        title = tagList(icon("chart-column"),"TssPlot"), width =NULL,
                        # sliderInput(inputId = "tss", label = ("TSS Enrichment"), min = 0, max = 10, value = 2),
-                       plotOutput("QCtssPlot",width="100%")%>%withSpinner(),
+                       div(class="plot-fill", plotOutput("QCtssPlot", width="100%", height="460px") %>% withSpinner()),
                        splitLayout(cellWidths = c("30%","30%","40%"),
                                    numericInput("TSSPlot_PlotWidth", "Width", min = 0, max = 250, value = 10),
                                    numericInput("TSSPlot_PlotHeight", "Height", min = 0, max = 250, value = 7),
@@ -292,7 +375,7 @@ ui<-dashboardPage(
                      tabPanel(
                        title = tagList(icon("chart-column"),"FragmentPlot"), width =NULL, 
                        # sliderInput(inputId = "fragment", label = ("Fragment Length"), min = 0, max = 10, value = 4),
-                       plotOutput("QCFragmentPlot",width="100%")%>%withSpinner(),
+                       div(class="plot-fill", plotOutput("QCFragmentPlot", width="100%", height="460px") %>% withSpinner()),
                        splitLayout(cellWidths = c("30%","30%","40%"),
                                    numericInput("FragmentPlot_PlotWidth", "Width", min = 0, max = 250, value = 10),
                                    numericInput("FragmentPlot_PlotHeight", "Height", min = 0, max = 250, value = 7),
@@ -357,7 +440,7 @@ ui<-dashboardPage(
                      # useShinyjs(), 
                      tabsetPanel(id="qVinplot",
                                  tabPanel("Before Filter",
-                                          plotOutput("QCVlnPlot",width="100%")%>%withSpinner(),
+                                          div(class="plot-fill", plotOutput("QCVlnPlot", width="100%", height="500px") %>% withSpinner()),
                                           div(id='custom-text-output',textOutput(outputId="text.cellsremain1")),
                                           br(),
                                           splitLayout(cellWidths = c("30%","30%","40%"),
@@ -367,7 +450,7 @@ ui<-dashboardPage(
                                                       tags$head(tags$style(HTML(".shiny-split-layout > div { overflow: visible;}")))),
                                           div(downloadButton(outputId = "QCVlnPlot_download_plot", label = "Download"), align = "center")),                   
                                  tabPanel("After Filter",
-                                          plotOutput("QCVlnPlots",width="100%")%>%withSpinner(),
+                                          div(class="plot-fill", plotOutput("QCVlnPlots", width="100%", height="500px") %>% withSpinner()),
                                           div(id='custom-text-output',textOutput(outputId="text.cellsremain2")),
                                           br(),
                                           splitLayout(cellWidths = c("30%","30%","40%"),
@@ -470,7 +553,7 @@ ui<-dashboardPage(
           fluidRow(
                     shinydashboard::box(
                      title = tagList(icon("chart-column"),"DepthCorPlot"), width = 6, status = "warning", collapsible = TRUE,
-                     plotlyOutput("DepthCorPlot",width="90%")%>%withSpinner(),
+                     plotOutput("DepthCorPlot", width="100%", height="500px")%>%withSpinner(),
                      splitLayout(cellWidths = c("30%","30%","40%"),
                                  numericInput("DepthCorPlot_PlotWidth", "Width", min = 0, max = 250, value = 10),
                                  numericInput("DepthCorPlot_PlotHeight", "Height", min = 0, max = 250, value = 7),
@@ -481,7 +564,7 @@ ui<-dashboardPage(
             
                    shinydashboard::box(
                      title = tagList(icon("chart-column"),"ClusterDimPlot"), width =6,status = "warning", collapsible = TRUE,
-                     plotOutput("ClusterDimPlot",width="100%")%>%withSpinner(),
+                     div(class="plot-fill", plotOutput("ClusterDimPlot", width="100%", height="520px") %>% withSpinner()),
                      splitLayout(cellWidths = c("30%","30%","40%"),
                                  numericInput("ClusterDimPlot_PlotWidth", "Width", min = 0, max = 250, value = 10),
                                  numericInput("ClusterDimPlot_PlotHeight", "Height", min = 0, max = 250, value = 7),
@@ -539,7 +622,7 @@ ui<-dashboardPage(
             column(6,
                    shinydashboard::box(
                      title = tagList(icon("chart-column"),"DimPlot"), width =NULL,height = "460px", status = "warning", collapsible = TRUE,
-                     plotOutput("DimPlot",height = "300")%>%withSpinner(),
+                     div(class="plot-fill", plotOutput("DimPlot", width="100%", height="510px") %>% withSpinner()),
                      splitLayout(cellWidths = c("30%","30%","40%"),
                                  numericInput("annotation_PlotWidth", "Width", min = 0, max = 250, value = 10),
                                  numericInput("annotation_PlotHeight", "Height", min = 0, max = 250, value = 7),
@@ -631,7 +714,7 @@ ui<-dashboardPage(
                 selectizeInput(inputId = "FeaturePlot_gene_select", label = "Marker Name:", choices = list("NULL"="NULL"),selected="NULL",
                                multiple = T,options = NULL),
                 div(actionButton("submit_FeaturePlot","FeaturePlot", icon = icon("play-circle")), align = "center"),
-                plotOutput("FeaturePlot")%>%withSpinner(),
+                div(class="plot-fill", plotOutput("FeaturePlot", width="100%", height="510px") %>% withSpinner()),
                 splitLayout(cellWidths = c("30%","30%","40%"),
                             numericInput("FeaturePlot_PlotWidth", "Width", min = 0, max = 250, value = 10),
                             numericInput("FeaturePlot_PlotHeight", "Height", min = 0, max = 250, value = 7),
@@ -703,7 +786,7 @@ ui<-dashboardPage(
           fluidRow(
             shinydashboard::box(
               title = tagList(icon("table-cells"),"VinPlot"), width =6,  status = "warning", collapsible = TRUE,
-              plotOutput('FM_VinPlot')%>%withSpinner(),
+              div(class="plot-fill", plotOutput("FM_VinPlot", width="100%", height="520px") %>% withSpinner()),
               splitLayout(cellWidths = c("30%","30%","40%"),
                           numericInput("FM_VinPlot_PlotWidth", "Width", min = 0, max = 250, value = 10),
                           numericInput("FM_VinPlot_PlotHeight", "Height", min = 0, max = 250, value = 13),
@@ -714,7 +797,7 @@ ui<-dashboardPage(
               div(downloadButton(outputId = "FM_VinPlot_download_plot", label = "Download"), align = "center")),
             shinydashboard::box(
               title = tagList(icon("table-cells"),"FeaturePlot"), width =6,  status = "warning", collapsible = TRUE,
-              plotOutput('FM_FeaturePlot')%>%withSpinner(),
+              div(class="plot-fill", plotOutput("FM_FeaturePlot", width="100%", height="520px") %>% withSpinner()),
               splitLayout(cellWidths = c("30%","30%","40%"),
                           numericInput("FM_FeaturePlot_PlotWidth", "Width", min = 0, max = 250, value = 10),
                           numericInput("FM_FeaturePlot_PlotHeight", "Height", min = 0, max = 250, value = 13),
@@ -776,7 +859,7 @@ ui<-dashboardPage(
             column(8,
                    shinydashboard::box(
                      title = tagList(icon("chart-column"),"Genomic Region Visualization Plot"), width =NULL,height = 710, status = "warning", collapsible = TRUE,
-                     plotOutput("GenomicRegionsPlot",width="100%",height = 550)%>%withSpinner(),
+                     div(class="plot-fill", plotOutput("GenomicRegionsPlot", width="100%", height="650px") %>% withSpinner()),
                      splitLayout(cellWidths = c("30%","30%","40%"),
                                  numericInput("GenomicRegionsPlot_PlotWidth", "Width", min = 0, max = 250, value = 10),
                                  numericInput("GenomicRegionsPlot_PlotHeight", "Height", min = 0, max = 250, value = 13),
@@ -870,7 +953,7 @@ ui<-dashboardPage(
             column(5,
                    shinydashboard::box(
                      title = tagList(icon("chart-column"),"Motif Plot"), width =NULL, status = "warning", collapsible = TRUE,
-                     plotOutput("MotifPlot1",width="100%")%>%withSpinner(),
+                     div(class="plot-fill", plotOutput("MotifPlot1", width="100%", height="520px") %>% withSpinner()),
                      splitLayout(cellWidths = c("30%","30%","40%"),
                                  numericInput("MotifPlot1_PlotWidth", "Width", min = 0, max = 250, value = 12),
                                  numericInput("MotifPlot1_PlotHeight", "Height", min = 0, max = 250, value = 8),
@@ -966,7 +1049,7 @@ ui<-dashboardPage(
             column(5,
                    shinydashboard::box(
                      title = tagList(icon("chart-column"),"Motif Plot"), width =NULL, status = "warning", collapsible = TRUE,
-                     plotOutput("MotifPlot2",width="100%")%>%withSpinner(),
+                     div(class="plot-fill", plotOutput("MotifPlot2", width="100%", height="520px") %>% withSpinner()),
                      splitLayout(cellWidths = c("30%","30%","40%"),
                                  numericInput("MotifPlot2_PlotWidth", "Width", min = 0, max = 250, value = 12),
                                  numericInput("MotifPlot2_PlotHeight", "Height", min = 0, max = 250, value = 8),
@@ -1059,7 +1142,7 @@ ui<-dashboardPage(
               title = tagList(icon("chart-column"),"GO Plot"), width =12,height = 810, status = "warning", collapsible = TRUE,
               tabsetPanel(id="GO_Plot",
                           tabPanel("One vs Rest",
-                                   plotOutput("GO_Plot1",width="80%",height = 590)%>%withSpinner(),
+                                   div(class="plot-fill", plotOutput("GO_Plot1", width="100%", height="630px") %>% withSpinner()),
                                    br(),
                                    splitLayout(cellWidths = c("30%","30%","40%"),
                                                numericInput("GO_Plot1_PlotWidth", "Width", min = 0, max = 250, value = 10),
@@ -1068,7 +1151,7 @@ ui<-dashboardPage(
                                                tags$head(tags$style(HTML(".shiny-split-layout > div { overflow: visible;}")))),
                                    div(downloadButton(outputId = "GO_Plot1_download_plot", label = "Download"), align = "center")),                   
                           tabPanel("One vs One",
-                                   plotOutput("GO_Plot2",width="80%",height = 590)%>%withSpinner(),
+                                   div(class="plot-fill", plotOutput("GO_Plot2", width="100%", height="630px") %>% withSpinner()),
                                    br(),
                                    splitLayout(cellWidths = c("30%","30%","40%"),
                                                numericInput("GO_Plot2_PlotWidth", "Width", min = 0, max = 250, value = 10),
@@ -1127,7 +1210,7 @@ ui<-dashboardPage(
                      selectizeInput(inputId = "genes_selected1", label = "Motif Name:",choices = list("NULL"="NULL"),selected="NULL",
                                     multiple = T,options = NULL),
                      div(actionButton("submit_FootPrinting","Transcription Factor Footprinting", icon = icon("play-circle")), align = "center"),
-                     plotOutput("FootPrintingPlot",width="100%")%>%withSpinner(),
+                     div(class="plot-fill", plotOutput("FootPrintingPlot", width="100%", height="560px") %>% withSpinner()),
                      splitLayout(cellWidths = c("30%","30%","40%"),
                                  numericInput("FootPrinting_PlotWidth", "Width", min = 0, max = 250, value = 12),
                                  numericInput("FootPrinting_PlotHeight", "Height", min = 0, max = 250, value = 8),

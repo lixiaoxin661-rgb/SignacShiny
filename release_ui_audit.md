@@ -1,21 +1,21 @@
 # SignacShiny 发布前界面逐页核对
 
-依据：用户确认的 12 页 PPT、主任务文件、`change_audit.md` 及论文 `SignacShiny_FINALV2.docx` 的功能术语。核对的是源码文本；浏览器渲染及完整功能仍待服务器独立测试。
+依据：用户确认的 12 页 PPT、主任务文件、`change_audit.md` 及论文 `SignacShiny_FINALV2.docx` 的功能术语。以下行号已按合并个人测试版后的 `ui.R` 更新；12 页 Introduction 已在个人服务器浏览器中逐页显示。完整功能验收状态另见 `server_stage_browser_test_20261112.md`。
 
 | PPT 页 | 模块 | 最终位置 | 文字逐字核对 | 论文功能 |
 |---|---|---|---|---|
-| 1 | Home | `ui.R:202` | 通过 | Home |
-| 2 | Quality Control | `ui.R:260` | 通过 | Quality Control |
-| 3 | Cell Filtering | `ui.R:333` | 通过 | Cell Filtering |
-| 4 | Dimensionality Reduction & Clustering | `ui.R:407` | 通过 | Dimensionality Reduction & Clustering |
-| 5 | One vs Rest | `ui.R:577` | 通过 | One vs Rest |
-| 6 | One vs One | `ui.R:671` | 通过 | One vs One |
-| 7 | Cell Type Annotation | `ui.R:521` | 通过 | Cell Type Annotation |
-| 8 | Genomic Region Visualization | `ui.R:754` | 通过 | Genomic Region Visualization |
-| 9 | GO Enrichment Analysis | `ui.R:1006` | 通过 | GO Enrichment Analysis |
-| 10 | Motif Enrichment (One vs Rest) | `ui.R:813` | 通过 | Motif Enrichment (One vs Rest) |
-| 11 | Motif Analysis (One vs One) | `ui.R:911` | 通过 | Motif Analysis (One vs One) |
-| 12 | Transcription Factor Footprinting | `ui.R:1110` | 通过 | Transcription Factor Footprinting |
+| 1 | Home | `ui.R:273` | 通过 | Home |
+| 2 | Quality Control | `ui.R:343` | 通过 | Quality Control |
+| 3 | Cell Filtering | `ui.R:416` | 通过 | Cell Filtering |
+| 4 | Dimensionality Reduction & Clustering | `ui.R:490` | 通过 | Dimensionality Reduction & Clustering |
+| 5 | One vs Rest | `ui.R:660` | 通过 | One vs Rest |
+| 6 | One vs One | `ui.R:754` | 通过 | One vs One |
+| 7 | Cell Type Annotation | `ui.R:604` | 通过 | Cell Type Annotation |
+| 8 | Genomic Region Visualization | `ui.R:837` | 通过 | Genomic Region Visualization |
+| 9 | GO Enrichment Analysis | `ui.R:1089` | 通过 | GO Enrichment Analysis |
+| 10 | Motif Enrichment (One vs Rest) | `ui.R:896` | 通过 | Motif Enrichment (One vs Rest) |
+| 11 | Motif Analysis (One vs One) | `ui.R:994` | 通过 | Motif Analysis (One vs One) |
+| 12 | Transcription Factor Footprinting | `ui.R:1193` | 通过 | Transcription Factor Footprinting |
 
 ## 逐页最终英文
 
@@ -89,6 +89,6 @@
 
 ## 仍需验证
 
-- 服务器独立运行时逐页浏览器渲染，尤其检查首页 SVG 的完整显示和窄窗口布局。
-- Gene Activity Matrix 创建后 RNA assay 的差异分析、图表和下载结果。
-- 运行依赖及数据对象可用性；Git LFS 远端对象缺失是 Release 阻断项。
+- 个人测试版已在浏览器逐页显示 12 页 Introduction，且已实测 Gene Activity Matrix 后 RNA assay 的两种差异分析与 CSV 下载；合并后的 Git 提交仍需在个人目录重新启动并验证。
+- 首页 SVG 在个人测试版显示且 HTTP 获取的 SHA-256 与原图一致；宽屏和窄屏完整布局仍需单独验收。
+- 公开克隆不含运行 PBMC 示例所需数据；合法数据获取途径及正式运行账户的依赖仍是 Release 阻断项。

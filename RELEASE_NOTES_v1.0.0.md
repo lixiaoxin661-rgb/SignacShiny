@@ -1,6 +1,6 @@
 # SignacShiny v1.0.0 — release notes draft
 
-**Status: draft. v1.0.0 has not been tagged or published.** The source parity, data acquisition, and deployment checks below must be closed before publication.
+**Status: draft. v1.0.0 has not been tagged or published.** The merged-commit runtime test, data acquisition, and deployment checks below must be closed before publication.
 
 ## Software overview
 
@@ -20,7 +20,7 @@ The public source branch does not contain the 12 previously broken Git LFS paylo
 
 ## Verified functionality and known limitations
 
-The personal staging instance loaded the 581-cell PBMC example; default filtering left 342 cells. QC, dimensionality reduction, clustering, gene activity, RNA differential analysis and CSV downloads, SingleR annotation, genomic region plotting, Motif Enrichment (One vs Rest), a motif sequence logo, and an ALX3 footprint curve with PNG download have browser evidence in `server_stage_browser_test_20261112.md`. The 633 displayed motif records are not 633 significant hits; visible adjusted p-values must be interpreted individually. GO enrichment returned a no-result warning in the tested example. Custom Data upload, Motif One vs One, and other unlisted parameter paths have not completed independent acceptance tests. The running personal-stage source has not yet been compared byte-for-byte with this branch, so these results cannot yet be attributed to a release commit.
+The personal staging instance loaded the 581-cell PBMC example; default filtering left 342 cells. QC, dimensionality reduction, clustering, gene activity, RNA differential analysis and CSV downloads, SingleR annotation, genomic region plotting, Motif Enrichment (One vs Rest), a motif sequence logo, and an ALX3 footprint curve with PNG download have browser evidence in `server_stage_browser_test_20261112.md`. The 633 displayed motif records are not 633 significant hits; visible adjusted p-values must be interpreted individually. GO enrichment returned a no-result warning in the tested example. The stage's analysis source has now been merged with only visible wording corrections, but the resulting Git commit has not yet been started in the personal environment. Custom Data upload, Motif One vs One, and other unlisted parameter paths have not completed independent acceptance tests.
 
 The app retains elapsed-time and memory monitoring. Its current shared global variables present a potential multi-session isolation risk; behavior under concurrent users has not been validated. The formal Shiny Server account's dependency availability has not been verified.
 
