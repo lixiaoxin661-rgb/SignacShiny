@@ -1,2 +1,3 @@
 www/workflow.svg -text
 *.sh text eol=lf
+DATA_SHA256SUMS.txt text eol=lf

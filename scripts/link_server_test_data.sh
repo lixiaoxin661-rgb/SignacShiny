@@ -28,29 +28,42 @@ files=(
   qcTSSPlot.rds
 )
 
-# Verify every source before creating any link.
+# Verify every source and manifest entry before creating any link.
 for name in "${files[@]}"; do
   source_file="$formal/data/$name"
   target="$stage/data/$name"
-  if [[ ! -f $source_file || ! -r $source_file || -e $target || -L $target ]]; then
+  if [[ ! -f $source_file || ! -r $source_file ]]; then
+    echo "Missing/unreadable source: $name" >&2
+    exit 1
+  fi
+  if [[ -L $target ]]; then
+    if [[ $(readlink -- "$target") != "$source_file" ]]; then
+      echo "Unexpected existing link: $name" >&2
+      exit 1
+    fi
+  elif [[ -e $target ]]; then
     echo "Missing/unreadable source or occupied target: $name" >&2
     exit 1
   fi
-done
-
-for name in "${files[@]}"; do
-  ln -s -- "$formal/data/$name" "$stage/data/$name"
-  expected=$(awk -v path="data/$name" '$2 == path {print $1}' "$stage/DATA_SHA256SUMS.txt")
+  expected=$(awk -v path="data/$name" '{ sub(/\r$/, "", $2); if ($2 == path) print $1 }' "$stage/DATA_SHA256SUMS.txt")
   if [[ ! $expected =~ ^[0-9a-f]{64}$ ]]; then
     echo "Missing expected SHA-256 for $name" >&2
     exit 1
   fi
-  actual=$(sha256sum -- "$stage/data/$name")
+  actual=$(sha256sum -- "$source_file")
   actual=${actual%% *}
   if [[ $actual != "$expected" ]]; then
     echo "SHA-256 mismatch for $name" >&2
     exit 1
   fi
-  echo "OK $name $actual"
+  echo "VERIFIED $name $actual"
+done
+
+for name in "${files[@]}"; do
+  target="$stage/data/$name"
+  if [[ ! -L $target ]]; then
+    ln -s -- "$formal/data/$name" "$target"
+  fi
+  echo "LINKED $name"
 done
 echo 'Private stage data links and hashes verified; R dependencies and Shiny functions remain untested.'
