@@ -1,29 +1,23 @@
-# SignacShiny v1.0.0 — release notes draft
+# SignacShiny v1.0.0
 
-**Status: draft. v1.0.0 has not been tagged or published.** The merged-commit runtime test, data acquisition, and deployment checks below must be closed before publication.
+SignacShiny is an R Shiny application for downstream analysis of processed single-cell ATAC-seq data. This source release includes the 12-page manuscript-aligned interface, the original vector workflow figure, and the tested analysis source.
 
-## Software overview
+## Features
 
-SignacShiny is an R Shiny application for downstream analysis of processed single-cell ATAC-seq data. It uses Signac and Seurat and provides a browser interface for quality control, cell filtering, dimensionality reduction, clustering, differential analysis, gene activity, cell annotation, genomic region visualization, GO enrichment, motif analysis, and transcription factor footprinting.
+The interface supports quality control, cell filtering, TF-IDF and SVD, dimensionality reduction and clustering, differential accessibility, gene activity analysis, SingleR annotation, genomic region visualization, GO enrichment, motif analysis, and transcription factor footprinting. Alignment and initial peak calling take place before import. Analysis methods and parameters are retained from the running server project.
 
-## Major features and usage
+## Runtime and installation
 
-The interface contains 12 analysis pages with manuscript-aligned descriptions and an original vector workflow figure. Import a processed dataset using the Custom Data inputs, or use the PBMC example after placing authorized, hash-verified example data in `data/`. Run the pages in workflow order and download results from the relevant plot and table panels. Initial alignment and peak calling are outside this application.
+The tested personal server environment used R 4.4.2 with Signac 1.17.1, Seurat 5.2.1, SingleR 2.8.0, Shiny 1.10.0, TFBSTools 1.44.0, motifmatchr 1.28.0, JASPAR2020 0.99.10, and ggseqlogo 0.2.2 for the motif plot. See `README.md` and `RUNTIME_ENV_AUDIT.md` for the full dependency discussion. The included `renv.lock` records an older Shiny version and is not a fully verified restore recipe. After installing the required dependencies and placing authorized data at the documented paths, start the app with `shiny::runApp(".")` from the project root.
 
-## System requirements and installation
+## Data requirements
 
-The server snapshot lockfile records R 4.4.2 and Bioconductor 3.20. Package names and preliminary install commands are in `README.md`. The lockfile is a historical baseline and does not yet constitute a complete, independently verified restore recipe. A personal-stage namespace check found R 4.4.2, shiny 1.10.0, Signac 1.17.1, Seurat 5.2.1, SingleR 2.8.0, ggplot2 4.0.3, patchwork 1.3.2, TFBSTools 1.44.0, motifmatchr 1.28.0, DirichletMultinomial 1.48.0, JASPAR2020 0.99.10, and ggseqlogo 0.2.2. The lockfile records a different shiny version. Full package inventory and system library linkage remain to be captured. A complete release must state and verify the final runtime requirements.
+The GitHub source archive does not contain the processed PBMC example, cached QC objects, or SingleR reference files. The former Git LFS pointers were unusable and have been removed. The running laboratory server has hash-verified private copies; this does not grant redistribution rights. Obtain the files through an authorized channel and check `DATA_SHA256SUMS.txt` before using the bundled example or reference-backed features. `README.md` and `DATA_AUDIT.md` list the paths and current availability. The separate celldex preparation script has not been validated as an exact replacement for the server files.
 
-## Example data requirements
+## Validation and limitations
 
-The public source branch does not contain the 12 previously broken Git LFS payloads. The server has real files with recorded SHA-256 hashes, but the five processed PBMC/QC objects have no confirmed redistribution permission or verified public reconstruction route. `DATA_AUDIT.md`, `DATA_SHA256SUMS.txt`, and `data/README.md` identify the expected files and their current status. A source clone alone is not sufficient to run the bundled example. This is a release blocker until a lawful, tested data delivery route is available and documented.
+The personal test environment ran the PBMC example (581 cells, 342 after default filtering), QC plots, TF-IDF, SVD/DepthCor, UMAP, clustering, Gene Activity Matrix, both RNA differential modes, SingleR annotation, genomic region plotting, One vs Rest motif analysis with a displayed sequence logo, and ALX3 footprinting. Selected CSV and PNG downloads were verified. The motif table's 633 records are not a claim of 633 significant hits. GO returned no enriched terms for the tested input. Custom Data upload, Motif One vs One, concurrent sessions, and all parameter paths have not completed full acceptance testing. The public Shiny Server environment must be checked separately after deployment.
 
-## Verified functionality and known limitations
+## Authors, license, and citation
 
-The personal staging instance loaded the 581-cell PBMC example; default filtering left 342 cells. QC, dimensionality reduction, clustering, gene activity, RNA differential analysis and CSV downloads, SingleR annotation, genomic region plotting, Motif Enrichment (One vs Rest), a motif sequence logo, and an ALX3 footprint curve with PNG download have browser evidence in `server_stage_browser_test_20261112.md`. The 633 displayed motif records are not 633 significant hits; visible adjusted p-values must be interpreted individually. GO enrichment returned a no-result warning in the tested example. The stage's analysis source has now been merged with only visible wording corrections, but the resulting Git commit has not yet been started in the personal environment. Custom Data upload, Motif One vs One, and other unlisted parameter paths have not completed independent acceptance tests.
-
-The app retains elapsed-time and memory monitoring. Its current shared global variables present a potential multi-session isolation risk; behavior under concurrent users has not been validated. The formal Shiny Server account's dependency availability has not been verified.
-
-## Citation, authorship, and license
-
-Cite the SignacShiny repository and the exact release tag or commit used for analysis. See `README.md` for the listed authors. The source code is distributed under the repository's MIT `LICENSE`; this does not establish redistribution rights for external or processed data. A formal manuscript citation can be added after publication details are finalized.
+See `README.md` for project and author information. Source code is provided under the repository's MIT license; data rights are separate. Cite the SignacShiny repository and this exact release tag or commit when reporting analyses.

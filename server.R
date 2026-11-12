@@ -122,8 +122,6 @@ server <- function(input,output,session){
   metadata <- reactiveVal(NULL)
   MotifMarkers2<- reactiveVal(NULL)
   MotifMarkers1<- reactiveVal(NULL)
-  markers_result_updated <- reactiveVal(0L)
-  pairwise_result_updated <- reactiveVal(0L)
   values<-reactiveValues(deDepthCorPlot=NULL)
   values<-reactiveValues(Normalization=NULL)
   # values<-reactiveValues(submit_GeneActivity=FALSE)
@@ -157,12 +155,12 @@ server <- function(input,output,session){
       vbox_NDR=renderValueBox({
         color<-if (!is.null(values$dpDimPlot)) "yellow" else "orange"
         icon_name <- if (!is.null(values$dpDimPlot)) "check" else "hourglass-half"
-        valueBox(value=NULL,subtitle =tags$p("Dimensionality Reduction & Clustering",style="font-size:14px;font-weight:bold"),
+        valueBox(value=NULL,subtitle =tags$p("Dim Reduction &Clustering",style="font-size:14px;font-weight:bold"),
                  color=color,icon = icon(icon_name,style = "font-size: 25px"))}),
       vbox_geneactivity = renderValueBox({
         color<-if (!is.null(gene.activities)) "yellow" else "orange"
         icon_name <- if (!is.null(gene.activities)) "check" else "hourglass-half" 
-        valueBox(value = NULL,subtitle =tags$p("Create Gene Activity Matrix ",style = "font-size:14px;font-weight:bold"),
+        valueBox(value = NULL,subtitle =tags$p("Creat Gene Activity Matrix ",style = "font-size:14px;font-weight:bold"),
                  color = color,
                  icon = icon(icon_name,style = "font-size: 25px"))}),
       vbox_findAllmaker=renderValueBox({
@@ -203,7 +201,7 @@ server <- function(input,output,session){
       vbox_footprint=renderValueBox({
         color<-if (!is.null(fpFootPrintingPlot)) "yellow" else "orange"
         icon_name <- if (!is.null(fpFootPrintingPlot)) "check" else "hourglass-half"
-        valueBox(value = NULL,subtitle =tags$p("Transcription Factor Footprinting",style="font-size:14px;font-weight:bold"),
+        valueBox(value = NULL,subtitle =tags$p("Foot Printing",style="font-size:14px;font-weight:bold"),
                  color=color,icon = icon(icon_name,style = "font-size: 25px"))})
     )} 
   
@@ -1072,7 +1070,6 @@ server <- function(input,output,session){
       colnames(FindAllMarkers_result)[7] <- "Marker"
       FindAllMarkers_result <- FindAllMarkers_result[, c("Marker","p_val", "avg_log2FC", "pct.1", "pct.2", "p_val_adj", "cluster")]
          }
-    markers_result_updated(markers_result_updated() + 1L)
     for (i in 70:90) {
       updateProgressBar(
         session = session,
@@ -1275,7 +1272,6 @@ server <- function(input,output,session){
       FindMarkers_result1[sapply(FindMarkers_result1,is.numeric)] <- round(FindMarkers_result1[sapply(FindMarkers_result1,is.numeric)],4)
       FindMarkers_result1$Marker<-rownames(FindMarkers_result1)
       FindMarkers_result<- FindMarkers_result1[, c("Marker","p_val", "avg_log2FC", "pct.1", "pct.2", "p_val_adj")]
-      pairwise_result_updated(pairwise_result_updated() + 1L)
       
       output$CompareMarkers_data <- DT::renderDataTable({
         datatable(data = FindMarkers_result,selection = 'single',rownames = FALSE,
@@ -1652,18 +1648,15 @@ server <- function(input,output,session){
   })
   observe({
     print("dsfj------------------dsg------")
-    markers_result_updated()
     Select_ident<-input$Ident_motif;  
     Pvalue <- input$Pvalue
-    if(!is.null(FindAllMarkers_result) && identical(assay1, "peaks")){
+    if(!is.null(FindAllMarkers_result)){
     MotifMarkers1(FindAllMarkers_result[FindAllMarkers_result$cluster==Select_ident&
                                           FindAllMarkers_result$p_val_adj<Pvalue,])
     MotifTopMarkers1<<-MotifMarkers1()
     marker_list_str <- paste(MotifTopMarkers1$gene, collapse = "\n")
     updateTextAreaInput(session,"Marker_list1","Marker List:",
                         value = marker_list_str)
-    } else {
-      updateTextAreaInput(session,"Marker_list1","Marker List:", value = "")
     }
   })
   
@@ -1978,10 +1971,9 @@ server <- function(input,output,session){
   #Motif idents table---------------------------------------------------------
   observe({
     print("dsfj1------------------dsg------")
-    pairwise_result_updated()
     selected_idents3 <- input$Ident41
     print(selected_idents3)
-    if(!is.null(FindMarkers_result1) && identical(assay2, "peaks")){
+    if(!is.null(FindMarkers_result1)){
       if(!is.null(selected_idents3)){
          if(selected_idents3==input$Ident11){
         print("ident1")
@@ -2024,8 +2016,6 @@ server <- function(input,output,session){
       }
         
       }
-    } else {
-      updateTextAreaInput(session,"Marker_list2","Marker List:", value = "")
     }
   })
   
@@ -2549,8 +2539,7 @@ server <- function(input,output,session){
   output$Motif_download_data2 <- downloadHandler(
     filename = function() {  
       formatted_time <- format(Sys.time(), "%Y-%m-%d-%H:%M:%S")
-      paste0(formatted_time, "-Motif_", input$Ident11, "_vs_", input$Ident12,
-             "_selected_", input$Ident41, ".csv")
+      paste0(formatted_time, "-", "Top",input$AllMarkersTopPeaks3,"markers_findmotif_",input$Ident41,"_vs_",input$Ident42,".csv")
     },
     content = function(file) {
       write.csv(enriched.motifs2, file)
@@ -2558,7 +2547,7 @@ server <- function(input,output,session){
   output$GO_download_data1 <- downloadHandler(
     filename = function() {  
       formatted_time <- format(Sys.time(), "%Y-%m-%d-%H:%M:%S")
-      paste0(formatted_time, "-GO_", input$idents_selected1, "_vs_rest.csv")
+      paste0(formatted_time, "-", "GO_Table_",input$idents_selected1,"markers_findmotif_",input$Ident41,"_vs_",input$Ident42,".csv")
     },
     content = function(file) {
       write.csv(ident1_ego1, file)
@@ -2566,8 +2555,7 @@ server <- function(input,output,session){
   output$GO_download_data2 <- downloadHandler(
     filename = function() {  
       formatted_time <- format(Sys.time(), "%Y-%m-%d-%H:%M:%S")
-      paste0(formatted_time, "-GO_", input$Ident11, "_vs_", input$Ident12,
-             "_selected_", input$idents_selected2, ".csv")
+      paste0(formatted_time, "-", "GO_Table_",input$idents_selected2,"markers_findmotif_",input$Ident41,"_vs_",input$Ident42,".csv")
     },
     content = function(file) {
       write.csv(ident1_ego2, file)
