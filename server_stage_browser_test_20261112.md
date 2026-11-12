@@ -17,9 +17,9 @@ Test target: the owner's forwarded personal Shiny instance at `http://127.0.0.1:
 | SingleR annotation | PASS for default reference | Ran annotation; table showed 5 rows, embedding plot rendered, CSV download returned HTTP 200 and 6 lines including header. |
 | Genomic Region Visualization | PASS for default plot | Ran the page's default peak/region selection; a plot rendered. Plot download was not tested. |
 | GO enrichment | NO ENRICHMENT RESULT | Ran with the auto-populated real marker list. The UI reported “GO enrichment analysis returned no results.” This confirms the no-result warning, not successful enrichment. |
-| Motif enrichment and plots | FAIL / NOT RETESTED | Earlier stage terminal traceback showed `there is no package called 'TFBSTools'`; `TFBSTools` and `motifmatchr` were still absent from the personal R libraries at the latest package check. |
-| Footprinting | NOT TESTED | Requires a valid motif and working motif dependencies. |
-| Custom Data upload, all other downloads | NOT TESTED | Four-file upload, t-SNE, motif outputs, footprint output and remaining plot formats need independent tests. |
+| Motif enrichment (One vs Rest) and plot | PASS for execution and display on port 3848 | Ran with default cluster 0 and two auto-populated real peaks. Completion dialog appeared; table displayed 633 records with columns including `pvalue` and `p.adjust`. The first visible adjusted p-value was 0.0609, so 633 is a record count, not a significant-hit count. Selecting the first row rendered a sequence logo. Motif CSV and plot download were not tested. |
+| Footprinting | PASS for default ALX3 computation and PNG download on port 3848 | Clicked the analysis button, saw completion, then a nonempty multi-group curve plot labeled MA0634.1. PNG download was 11,912,708 bytes with a valid PNG signature and SHA-256 `652a97076b7d99d4e316e44c4bd6f5e54697d0a3175a56cfd92d7c67de536c4d`. This validates one motif on the personal stage, not all motifs. |
+| Motif One vs One, Custom Data upload, all other downloads | NOT TESTED | Four-file upload, t-SNE, Motif One vs One, other motif outputs and remaining plot formats need independent tests. |
 
 The running page still had a few visible label typos in progress cards and plot titles. The local Git branch corrects `Greate/Creat Gene Activity Matrix`, `Dim Reduction &Clustering`, `Foot Printing`, and `GenomicReginsPlot` without changing IDs, algorithms or parameters. These local fixes have **not** been deployed to the tested stage.
 
