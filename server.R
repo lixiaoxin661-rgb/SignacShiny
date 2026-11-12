@@ -2549,7 +2549,8 @@ server <- function(input,output,session){
   output$Motif_download_data2 <- downloadHandler(
     filename = function() {  
       formatted_time <- format(Sys.time(), "%Y-%m-%d-%H:%M:%S")
-      paste0(formatted_time, "-", "Top",input$AllMarkersTopPeaks3,"markers_findmotif_",input$Ident41,"_vs_",input$Ident42,".csv")
+      paste0(formatted_time, "-Motif_", input$Ident11, "_vs_", input$Ident12,
+             "_selected_", input$Ident41, ".csv")
     },
     content = function(file) {
       write.csv(enriched.motifs2, file)
@@ -2557,7 +2558,7 @@ server <- function(input,output,session){
   output$GO_download_data1 <- downloadHandler(
     filename = function() {  
       formatted_time <- format(Sys.time(), "%Y-%m-%d-%H:%M:%S")
-      paste0(formatted_time, "-", "GO_Table_",input$idents_selected1,"markers_findmotif_",input$Ident41,"_vs_",input$Ident42,".csv")
+      paste0(formatted_time, "-GO_", input$idents_selected1, "_vs_rest.csv")
     },
     content = function(file) {
       write.csv(ident1_ego1, file)
@@ -2565,7 +2566,8 @@ server <- function(input,output,session){
   output$GO_download_data2 <- downloadHandler(
     filename = function() {  
       formatted_time <- format(Sys.time(), "%Y-%m-%d-%H:%M:%S")
-      paste0(formatted_time, "-", "GO_Table_",input$idents_selected2,"markers_findmotif_",input$Ident41,"_vs_",input$Ident42,".csv")
+      paste0(formatted_time, "-GO_", input$Ident11, "_vs_", input$Ident12,
+             "_selected_", input$idents_selected2, ".csv")
     },
     content = function(file) {
       write.csv(ident1_ego2, file)
