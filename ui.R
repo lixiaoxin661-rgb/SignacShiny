@@ -1240,9 +1240,8 @@ uiOutput("FileInputs"),
                                 line-height:1.5;
                                 baseline：middle;'>",
                 "<b>Contact</b>",
-                "<br>If you have any technical or collaboration needs, please contact:",
-                "<br>Siwen Xu (siwxu@gdpu.edu.cn)",
-                "<br>Yuyan Luo (1620218029@qq.com)",
+                "<br>Current maintainer: Li Xiaoxin (2400507119@stu.gdpu.edu.cn)",
+                "<br>Original authors: Siwen Xu (siwxu@gdpu.edu.cn); Yuyan Luo (1620218029@qq.com)",
                 "</p>",
                 "<br><p style = 'text-align: justify;font-size: 16.5px;color:black;
                                 font-style:calibri;

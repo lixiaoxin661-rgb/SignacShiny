@@ -20,4 +20,4 @@ The personal test environment ran the PBMC example (581 cells, 342 after default
 
 ## Authors, license, and citation
 
-See `README.md` for project and author information. Source code is provided under the repository's MIT license; data rights are separate. Cite the SignacShiny repository and this exact release tag or commit when reporting analyses.
+Current maintainer: Li Xiaoxin (2400507119@stu.gdpu.edu.cn; GitHub: lixiaoxin661-rgb). See `README.md` for original authors. Source code is provided under the repository's MIT license; data rights are separate. Cite the SignacShiny repository and this exact release tag or commit when reporting analyses.

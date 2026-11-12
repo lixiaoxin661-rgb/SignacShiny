@@ -58,8 +58,10 @@ Use R 4.4.2 and Bioconductor 3.20 when comparing with the server snapshot. The m
     shiny::runApp("/path/to/SignacShiny-main")
     ```
   
-## Authors
-Please do not hesitate to post an issue or contact the authors :
+## Maintainer and authors
+Current maintainer: Li Xiaoxin (2400507119@stu.gdpu.edu.cn; GitHub: lixiaoxin661-rgb). For software questions, post an issue or contact the maintainer.
+
+Original authors:
 
 Siwen Xu: siwxu@gdpu.edu.cn
 
