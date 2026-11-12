@@ -1,76 +1,58 @@
 # SignacShiny
-SignacShiny is an interactive R Shiny application for downstream analysis of processed scATAC-seq data. Built on Signac and Seurat, it supports quality control, cell filtering, dimensionality reduction, clustering, differential accessibility, gene activity, cell annotation, genomic region visualization, GO enrichment, motif analysis, and transcription factor footprinting. Alignment and initial peak calling are completed before import.
 
-![SignacShiny workflow](www/workflow.svg)
+**An interactive web application for downstream analysis of single-cell chromatin accessibility data.**
 
-## Data and reproducibility status
+SignacShiny brings a Signac- and Seurat-based scATAC-seq workflow into an R Shiny interface. Researchers can adjust parameters, explore results, and export figures and tables without writing R code during analysis. It accepts processed scATAC-seq data; read alignment and initial peak calling are performed before import.
 
-The application imports processed scATAC-seq inputs. The server code also reads local files under `data/` for the bundled PBMC example, cached quality-control plots, and SingleR reference datasets. The expected relative paths and SHA-256 hashes are in [DATA_SHA256SUMS.txt](DATA_SHA256SUMS.txt). Place verified files at those exact paths before using the corresponding example or reference feature. A Git LFS pointer is not the data file.
+[Releases](https://github.com/lixiaoxin661-rgb/SignacShiny/releases) · [Installation](docs/INSTALLATION.md) · [Data requirements](data/README.md) · [Issues](https://github.com/lixiaoxin661-rgb/SignacShiny/issues)
 
-**Server data:** The owner rehashed all 12 real files in `/srv/shiny-server/Signacshiny/data/`; they exist and match the server SHA-256 manifest. This establishes the server's private test inputs, not public GitHub availability. An authorized test clone on that server can use [scripts/link_server_test_data.sh](scripts/link_server_test_data.sh) to link only the 11 files read by the application and verify their hashes without copying or changing the formal data.
+## Workflow
 
-**GitHub data delivery:** This is a source-code release; it does **not** include the bundled PBMC example, cached QC objects, or SingleR reference files. An authenticated GitHub LFS download check returned 404 for all 12 previously tracked objects, so the unusable pointer files were removed. Five of those pointers also identified versions different from the server manifest; this does not imply the server files are wrong. See the [runtime data directory](data/README.md). A source clone alone cannot run the bundled example or reference-backed features. Obtain the required files from the project maintainers for authorized use and verify their hashes before running those features. Redistribution permissions for the processed PBMC/QC files remain unconfirmed.
+![SignacShiny analysis workflow](www/workflow.svg)
 
-The seven SingleR reference datasets have [public celldex getters](https://bioconductor.org/packages/release/data/experiment/html/celldex.html). In an isolated test environment with `celldex` and `digest` installed, run `Rscript --vanilla scripts/prepare_celldex_references.R /path/to/stage/data` to create files with the object names and `label.fine` fields expected by `server.R`. An optional second argument, such as `NovershternHematopoietic`, prepares only that reference for a small first test. The script refuses to overwrite existing files and prints the SHA-256 of each generated file. **This route has not yet been executed against the server's R environment or shown to produce the server manifest hashes; it is not yet a validated replacement for those exact files.** Regenerated files may have different hashes from the server's serialized originals; record their own hashes and verify their SingleR behavior before distribution. Keep the processed PBMC and QC objects private until their provenance and distribution rights are confirmed.
+## Features
 
-For a user-supplied processed dataset, upload the peak matrix, fragments file and its `.tbi` index, and cell metadata through the application. The UI provides direct download links for the 10x Genomics PBMC 500 Next GEM example, including its [fragments file](https://cf.10xgenomics.com/samples/cell-atac/1.1.0/atac_pbmc_500_nextgem/atac_pbmc_500_nextgem_fragments.tsv.gz) and [index](https://cf.10xgenomics.com/samples/cell-atac/1.1.0/atac_pbmc_500_nextgem/atac_pbmc_500_nextgem_fragments.tsv.gz.tbi); verify the source terms before redistributing its files. The server manifest lists an optional copy under `data/zc/1/`, but the application does not reference that fixed directory. After obtaining authorized data, verify them from the project root with `sha256sum -c DATA_SHA256SUMS.txt` on Linux, or compare each file with `Get-FileHash -Algorithm SHA256` on Windows. Missing optional entries must be identified separately when checking only the files needed for a chosen workflow.
+- **Quality assessment and filtering:** inspect fragment counts, TSS enrichment, nucleosome signal, reads in peaks, and blacklist ratios; select cell-filtering thresholds.
+- **Dimensionality reduction and clustering:** perform TF-IDF normalization and SVD/LSI, inspect depth correlations, and explore UMAP or t-SNE embeddings and graph-based clusters.
+- **Differential analysis:** compare peaks or gene activity scores using one-versus-rest or pairwise cluster comparisons.
+- **Biological interpretation:** calculate gene activity, annotate cell types with SingleR references, visualize genomic regions, and perform GO enrichment.
+- **Regulatory analysis and export:** explore motif enrichment, sequence logos, and transcription factor footprints; export supported figures and result tables.
 
-The committed [renv.lock](renv.lock) is an unchanged copy of the server snapshot. It records R 4.4.2, Bioconductor 3.20, Shiny 1.11.1, Signac 1.17.1, Seurat 5.2.1, and SingleR 2.8.0. These are lockfile records, not a live inventory of the server. The lockfile omits `JASPAR2020` and the three `EnsDb.*` packages loaded at startup, and some genome packages selected later. It is therefore a provenance baseline, not yet a complete, tested restore recipe. The public source does not auto-activate renv or include the server's private package library. Runtime profiling uses `lobstr` when available and continues without memory figures when it is absent.
+## Getting started
 
-## Local Installation (Optional)
+1. Download a [source release](https://github.com/lixiaoxin661-rgb/SignacShiny/releases), or clone the repository:
 
-### 1. Download SignacShiny Source Code
-You can obtain the source code in either of the following ways:
-  + Clone the GitHub repository:
-    ```bash
-    git clone https://github.com/lixiaoxin661-rgb/SignacShiny.git
-    ```
-    Or
+   ```bash
+   git clone https://github.com/lixiaoxin661-rgb/SignacShiny.git
+   ```
 
-   + Download the ZIP file from: https://github.com/lixiaoxin661-rgb/SignacShiny
-      The downloaded folder should be named SignacShiny-main.
+2. Follow the [installation guide](docs/INSTALLATION.md) to prepare R dependencies and required data.
+3. Start the application from R:
 
+   ```r
+   shiny::runApp("/path/to/SignacShiny")
+   ```
 
+4. Choose **Example Data** when its local files are available, or **Custom Data** to upload a peak matrix, fragments file, matching `.tbi` index, and cell metadata. Select the appropriate reference annotation, then follow the modules from quality control to downstream analysis.
 
+**Data are supplied separately.** Source releases do not bundle the processed PBMC example, cached QC plots, or SingleR reference objects. See [data requirements](data/README.md) before using these features. Downloading the source alone does not provide a complete analysis environment.
 
-### 2. Review dependencies and run SignacShiny
-Use R 4.4.2 and Bioconductor 3.20 when comparing with the server snapshot. The manual package commands below describe required packages but have not been validated as a complete installation in a clean environment. Check the [renv.lock](renv.lock) baseline and the packages actually loaded by `global.R`, `ui.R`, and `server.R` before running the application. Do not treat a successful package installation as evidence that the missing runtime data are available.
+## Validation
 
-+ **Manual package list for an isolated test environment**
+The v1.0.1 source was run in an isolated personal server directory with R 4.4.2, existing dependencies, and verified local data. Example import, QC, filtering, TF-IDF, SVD, UMAP, and clustering completed; the example contained 581 cells before filtering and 342 afterward. This test did not cover every downstream module, custom upload, concurrent sessions, or installation in a clean environment.
 
-  1. Open R or RStudio in the test environment.
-  2. Install the packages for the chosen R/Bioconductor release:
-  
-    ```r
-    install.packages(c("bslib", "shiny", "shinyjs", "shinyBS", "shinyWidgets","shinybusy", "shinycssloaders", "shinydashboard", "shinydashboardPlus","ggplot2", "plotly", "patchwork", "cowplot", "dplyr", "purrr", "plyr","stringr", "sp", "Matrix", "ggseqlogo","matrixStats", "data.table", "DT", "irlba","systemfonts", "ggforce", "scatterpie"))  
-  
-    if (!requireNamespace("BiocManager", quietly = TRUE))
-        install.packages("BiocManager")  
-        
-    BiocManager::install(c("MAST", "Seurat", "Signac", "SingleR", "SingleCellExperiment", "BiocFileCache", "AnnotationHub",
-    "SummarizedExperiment", "Biobase", "MatrixGenerics", "S4Vectors", "IRanges", "GenomeInfoDb", "GenomicRanges", "BiocGenerics", "XVector", "Biostrings", "BiocIO", "rtracklayer", "BSgenome", "BSgenome.Hsapiens.UCSC.hg19", "GenomicFeatures", "AnnotationDbi", "AnnotationFilter", "ensembldb", "EnsDb.Hsapiens.v75", "EnsDb.Hsapiens.v86", "EnsDb.Mmusculus.v79", "org.Hs.eg.db", "org.Mm.eg.db", "GO.db", "BSgenome.Hsapiens.UCSC.hg38", "BSgenome.Hsapiens.NCBI.GRCh38", "BSgenome.Mmusculus.UCSC.mm10", "HDO.db", "clusterProfiler", "JASPAR2020", "TFBSTools", "motifmatchr"))
-    ```
-    The separate reference preparation script additionally requires `celldex` and `digest`.
+## Contact
 
-  3. After real data are present and verified, run the application from the project directory:
-  
-    ```r
-    shiny::runApp("/path/to/SignacShiny-main")
-    ```
-  
-## Maintainer and authors
-Current maintainer: Li Xiaoxin (2400507119@stu.gdpu.edu.cn; GitHub: lixiaoxin661-rgb). For software questions, post an issue or contact the maintainer.
+**Current maintainer:** Li Xiaoxin — [2400507119@stu.gdpu.edu.cn](mailto:2400507119@stu.gdpu.edu.cn) · [lixiaoxin661-rgb](https://github.com/lixiaoxin661-rgb)
 
-Original authors:
+**Scientific contact:** Siwen Xu — [siwxu@gdpu.edu.cn](mailto:siwxu@gdpu.edu.cn)
 
-Siwen Xu: siwxu@gdpu.edu.cn
+For software questions and reproducible bug reports, please [open an issue](https://github.com/lixiaoxin661-rgb/SignacShiny/issues).
 
-Yuyan Luo : 1620218029@qq.com
+## Citation
 
-## Version and citation
-
-The source repository is https://github.com/lixiaoxin661-rgb/SignacShiny. Cite the repository and the version or commit used in your analysis. A formal publication citation will be added when available.
+When using SignacShiny, cite this repository and the release version or commit used in your analysis. Also cite the underlying methods and packages used in your workflow. A publication citation will be added when available.
 
 ## License
 
-This project is distributed under the terms in [LICENSE](LICENSE).
+SignacShiny is distributed under the [MIT License](LICENSE). Existing copyright notices and project history are retained.
