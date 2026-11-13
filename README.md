@@ -41,10 +41,6 @@ The Shiny application is available at [https://xulabgdpu.cpolar.top/Signacshiny/
 
 **Data are supplied separately.** Source releases do not bundle the processed PBMC example, cached QC plots, or SingleR reference objects. See [data requirements](data/README.md) before using these features. Downloading the source alone does not provide a complete analysis environment.
 
-## Validation
-
-An earlier source revision was run in an isolated personal server directory with R 4.4.2, existing dependencies, and verified local data. Example import, QC, filtering, TF-IDF, SVD, UMAP, and clustering completed; the example contained 581 cells before filtering and 342 afterward. This test did not cover every downstream module, custom upload, concurrent sessions, or installation in a clean environment.
-
 ## Authors
 
 Siwen Xu — [siwxu@gdpu.edu.cn](mailto:siwxu@gdpu.edu.cn)
