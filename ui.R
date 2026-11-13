@@ -536,8 +536,7 @@ uiOutput("FileInputs"),
             shinydashboard::box(
                 title = tagList(icon("chart-column"),"Create Gene Activity Matrix "), width =12, status = "warning", collapsible = TRUE,
                 helpText(
-                  div(class="my-custom-div", id="gene-activity-description",
-                      tags$head(tags$style(HTML("#gene-activity-description .signac-intro-focus { color: inherit !important; font-weight: inherit !important; background: none !important; padding: 0 !important; text-decoration: none !important; } #gene-activity-description strong { color: #98560A; font-weight: 650; text-decoration: none; }"))),
+                  div(class="my-custom-div",
                       strong("Create Gene Activity Matrix"),
                       " module in our single-cell ATAC-seq platform enables the ",
                       "quantification of ", strong("gene activity"), " based on chromatin accessibility",
@@ -1240,7 +1239,8 @@ uiOutput("FileInputs"),
                                 line-height:1.5;
                                 baseline：middle;'>",
                 "<b>Contact</b>",
-                "<br>Authors: Siwen Xu (siwxu@gdpu.edu.cn); Li Xiaoxin (2400507119@stu.gdpu.edu.cn)",
+                "<br>Authors: Siwen Xu (siwxu@gdpu.edu.cn)",
+                "<br>Li Xiaoxin (2400507119@stu.gdpu.edu.cn)",
                 "</p>",
                 "<br><p style = 'text-align: justify;font-size: 16.5px;color:black;
                                 font-style:calibri;
