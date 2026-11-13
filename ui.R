@@ -536,14 +536,14 @@ uiOutput("FileInputs"),
             shinydashboard::box(
                 title = tagList(icon("chart-column"),"Create Gene Activity Matrix "), width =12, status = "warning", collapsible = TRUE,
                 helpText(
-                  div(class="my-custom-div",
-                      strong("Greate Gene Activity Matrix"),
-                      "module in our single-cell ATAC-seq platform enables the ",
-                      strong("quantification of gene activity based on chromatin accessibility"),
-                      ".Since scATAC-seq primarily captures open chromatin regions rather than direct gene expression levels, interpreting and annotating clusters can be more challenging 
+                  div(class="my-custom-div", id="gene-activity-description",
+                      tags$head(tags$style(HTML("#gene-activity-description .signac-intro-focus { color: inherit !important; font-weight: inherit !important; background: none !important; padding: 0 !important; text-decoration: none !important; } #gene-activity-description strong { color: #98560A; font-weight: 650; text-decoration: none; }"))),
+                      strong("Create Gene Activity Matrix"),
+                      " module in our single-cell ATAC-seq platform enables the ",
+                      "quantification of ", strong("gene activity"), " based on chromatin accessibility",
+                      ". Since scATAC-seq primarily captures open chromatin regions rather than direct gene expression levels, interpreting and annotating clusters can be more challenging 
                       than in scRNA-seq. This module helps ",
-                      strong("bridge that gap by estimating gene activity from chromatin accessibility data, allowing users to better interpret single-cell 
-                      ATAC-seq results."),
+                      strong("bridge that gap"), " by estimating gene activity from chromatin accessibility data, allowing users to better interpret single-cell ATAC-seq results.",
                       " By associating chromatin accessibility with potential gene expression, this module facilitates a deeper understanding of cell-type-specific regulatory 
                       landscapes, providing valuable insights into gene regulation and cellular function.", style = "font-size:15.5px;",align="center")
                  
@@ -1240,8 +1240,7 @@ uiOutput("FileInputs"),
                                 line-height:1.5;
                                 baseline：middle;'>",
                 "<b>Contact</b>",
-                "<br>Current maintainer: Li Xiaoxin (2400507119@stu.gdpu.edu.cn)",
-                "<br>Original authors: Siwen Xu (siwxu@gdpu.edu.cn); Yuyan Luo (1620218029@qq.com)",
+                "<br>Authors: Siwen Xu (siwxu@gdpu.edu.cn); Li Xiaoxin (2400507119@stu.gdpu.edu.cn)",
                 "</p>",
                 "<br><p style = 'text-align: justify;font-size: 16.5px;color:black;
                                 font-style:calibri;
