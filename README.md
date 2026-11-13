@@ -4,6 +4,8 @@
 
 SignacShiny brings a Signac- and Seurat-based scATAC-seq workflow into an R Shiny interface. Researchers can adjust parameters, explore results, and export figures and tables without writing R code during analysis. It accepts processed scATAC-seq data; read alignment and initial peak calling are performed before import.
 
+[Online Application](https://xulabgdpu.cpolar.top/Signacshiny/)
+
 [Releases](https://github.com/lixiaoxin661-rgb/SignacShiny/releases) · [Installation](docs/INSTALLATION.md) · [Data requirements](data/README.md) · [Issues](https://github.com/lixiaoxin661-rgb/SignacShiny/issues)
 
 ## Workflow
@@ -41,11 +43,11 @@ SignacShiny brings a Signac- and Seurat-based scATAC-seq workflow into an R Shin
 
 The v1.0.1 source was run in an isolated personal server directory with R 4.4.2, existing dependencies, and verified local data. Example import, QC, filtering, TF-IDF, SVD, UMAP, and clustering completed; the example contained 581 cells before filtering and 342 afterward. This test did not cover every downstream module, custom upload, concurrent sessions, or installation in a clean environment.
 
-## Contact
+## Authors
 
-**Current maintainer:** Li Xiaoxin — [2400507119@stu.gdpu.edu.cn](mailto:2400507119@stu.gdpu.edu.cn) · [lixiaoxin661-rgb](https://github.com/lixiaoxin661-rgb)
+Siwen Xu — [siwxu@gdpu.edu.cn](mailto:siwxu@gdpu.edu.cn)
 
-**Scientific contact:** Siwen Xu — [siwxu@gdpu.edu.cn](mailto:siwxu@gdpu.edu.cn)
+Li Xiaoxin — [2400507119@stu.gdpu.edu.cn](mailto:2400507119@stu.gdpu.edu.cn)
 
 For software questions and reproducible bug reports, please [open an issue](https://github.com/lixiaoxin661-rgb/SignacShiny/issues).
 
